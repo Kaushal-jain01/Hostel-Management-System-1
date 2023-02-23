@@ -74,6 +74,7 @@ const insertUser = async(req, res)=>{
             email : req.body.email,
             phone : req.body.mno,
             password : spassword,
+            regNo : req.body.regNo,
             is_admin : 0
         })
 
