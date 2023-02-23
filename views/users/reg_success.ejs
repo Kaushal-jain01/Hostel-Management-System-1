@@ -1,0 +1,17 @@
+<% include('../layouts/header.ejs') %>
+
+<% 
+
+    if(typeof message!== 'undefined'){
+    %>
+
+    <h3 style="color: green"> <%= message %> </h3>
+
+        <% 
+    }
+
+%>
+
+<p> Go to<a href="/login"> Login Page</a>  </p>
+
+<% include('../layouts/footer.ejs') %>
