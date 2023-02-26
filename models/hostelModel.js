@@ -13,7 +13,7 @@ const roomSchema = new mongoose.Schema({
 
     student_allocated: {
         type: String,
-        default: null
+        default: ""
     }
 });
 

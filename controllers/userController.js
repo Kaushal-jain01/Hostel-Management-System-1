@@ -5,26 +5,44 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 
 
-const randomHostel = async() => {
+const randomHostel = async (reg_no) => {
     try {
 
         var hos = []
         var rooms = []
+        var vacan = 0
 
         const hostelsData = await Hostel.find({})
-        hostelsData.forEach(function(hostel){
-            hos.push(hostel.name)
+        hostelsData.forEach(function (hostel) {
+            vacan = hostel.vacancy //existing vacancy
+            if(hostel.vacancy){
+                hos.push(hostel.name)
+            }
+            
         })
 
-        var allocatedHostel = hos[Math.floor(Math.random()*hos.length)];
+        var allocatedHostel = hos[Math.floor(Math.random() * hos.length)];
 
-        await Hostel.findOne({ name: allocatedHostel}).then((hostel)=>{
-            hostel.rooms.forEach(function(hostel){
-                rooms.push(hostel.room_no)
+        await Hostel.findOne({ name: allocatedHostel }).then((hostel) => {
+            hostel.rooms.forEach(function (room) {
+                if(room.vacant){
+                    rooms.push(room.room_no)
+                }
             })
         })
 
-        var allocatedRoom = rooms[Math.floor(Math.random()*rooms.length)];
+        var allocatedRoom = rooms[Math.floor(Math.random() * rooms.length)];
+
+        //updating hostel vacancies and student allocated
+
+        await Hostel.updateOne(
+            { name: allocatedHostel, "rooms.room_no": allocatedRoom },
+            { $set: { 
+                "rooms.$.vacant":  false,
+                "rooms.$.student_allocated": reg_no,
+                vacancy: vacan - 1
+         } }
+          )
 
         allocatedData = ({
             'hostel_name': allocatedHostel,
@@ -90,6 +108,10 @@ const sendVerifyMail = async (name, email, user_id) => {
 
 const loadRegister = async (req, res) => {
     try {
+
+        //using this for testing
+        const randHostel = await randomHostel(2002)
+        console.log(randHostel)
         res.render('registration')
 
     } catch (error) {
@@ -142,16 +164,16 @@ const loadApplyHostel = async (req, res) => {
 const applyHostel = async (req, res) => {
     try {
 
-        const randHostel = await randomHostel()
-        console.log(randHostel)
+        const randHostel = await randomHostel(req.body.reg_no)
+        console.log(req.body.reg_no)
 
         User.updateOne({ _id: req.session.user_id },
             {
                 $set: {
-                    dept: req.body.dept, 
+                    dept: req.body.dept,
                     semester: req.body.semester,
-                    address: req.body.address, 
-                    guardian_name: req.body.guardian_name, 
+                    address: req.body.address,
+                    guardian_name: req.body.guardian_name,
                     guardian_phone: req.body.guardian_phone,
                     hostel_allocated: randHostel
 
