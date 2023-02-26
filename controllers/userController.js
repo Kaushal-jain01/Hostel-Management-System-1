@@ -27,7 +27,7 @@ const randomHostel = async() => {
         var allocatedRoom = rooms[Math.floor(Math.random()*rooms.length)];
 
         allocatedData = ({
-            'hostel': allocatedHostel,
+            'hostel_name': allocatedHostel,
             'room_no': allocatedRoom
         })
         return allocatedData
@@ -137,11 +137,13 @@ const loadApplyHostel = async (req, res) => {
     }
 }
 
-//still not working (can't pass the hostel)
+//got it working
 
 const applyHostel = async (req, res) => {
     try {
 
+        const randHostel = await randomHostel()
+        console.log(randHostel)
 
         User.updateOne({ _id: req.session.user_id },
             {
@@ -151,22 +153,21 @@ const applyHostel = async (req, res) => {
                     address: req.body.address, 
                     guardian_name: req.body.guardian_name, 
                     guardian_phone: req.body.guardian_phone,
-                    "hostel_allocated.hostel_name": "asdasa",
-                    "hostel_allocated.room_no": 1
+                    hostel_allocated: randHostel
 
 
                 }
             }, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    console.log(`error ${err}`);
                 } else {
                     console.log(result);
-                    res.send('suceess')
+                    res.send(`You have been allocated at ${randHostel.hostel_name} room no ${randHostel.room_no}`)
                 }
             });
 
     } catch (error) {
-        console.log(error.message)
+        console.log(`errrrro ${error.message}`)
     }
 
 }

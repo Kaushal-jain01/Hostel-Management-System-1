@@ -1,16 +1,5 @@
 const mongoose = require('mongoose')
 
-const hostelSchema = mongoose.Schema({
-    hostel_name: {
-        type: String,
-        default: 'None'
-    },
-    room_no: {
-        type: Number,
-        default: 0
-    }
-
-})
 
 const userSchema = mongoose.Schema({
 
@@ -57,11 +46,20 @@ const userSchema = mongoose.Schema({
         type: Number,
         default: 1
     },
-    hostel_allocated: { hostelSchema }
+    hostel_allocated: {
+        hostel_name: {
+            type: String,
+            default: 'None'
+        },
+        room_no: {
+            type: Number,
+            default: 0
+        }
+
+    }
 
 })
 
 
 module.exports = mongoose.model('User', userSchema)
-
 
