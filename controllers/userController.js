@@ -1,31 +1,66 @@
 const User = require('../models/userModel')
+const Hostel = require('../models/hostelModel')
 const bcrypt = require('bcrypt')
 
 const nodemailer = require('nodemailer')
 
-const securePassword = async(password)=>{
+
+const randomHostel = async() => {
+    try {
+
+        var hos = []
+        var rooms = []
+
+        const hostelsData = await Hostel.find({})
+        hostelsData.forEach(function(hostel){
+            hos.push(hostel.name)
+        })
+
+        var allocatedHostel = hos[Math.floor(Math.random()*hos.length)];
+
+        await Hostel.findOne({ name: allocatedHostel}).then((hostel)=>{
+            hostel.rooms.forEach(function(hostel){
+                rooms.push(hostel.room_no)
+            })
+        })
+
+        var allocatedRoom = rooms[Math.floor(Math.random()*rooms.length)];
+
+        allocatedData = ({
+            'hostel': allocatedHostel,
+            'room_no': allocatedRoom
+        })
+        return allocatedData
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+const securePassword = async (password) => {
 
     try {
 
         const passwordHash = await bcrypt.hash(password, 10)
         return passwordHash
-        
+
     } catch (error) {
         console.log(error.message)
     }
 }
 
 //for sending mail
-const sendVerifyMail = async(name, email, user_id)=>{
+const sendVerifyMail = async (name, email, user_id) => {
 
     try {
 
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 587,
-            secure:false,
-            requireTLS:true,
-            auth:{
+            secure: false,
+            requireTLS: true,
+            auth: {
                 user: 'jainkaushal899@gmail.com',
                 pass: ''
             }
@@ -38,72 +73,114 @@ const sendVerifyMail = async(name, email, user_id)=>{
             html: '<p>Hi' + name + '. Please click <a href="http://localhost:3000/verify?id' + user_id + '">here</a> to verify your mail.</p>'
         }
 
-        transporter.sendMail(mailOptions, function(error, info){
-            if(error){
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
                 console.log(error)
             }
-            else{
+            else {
                 console.log("Email has been sent:- ", info.response)
             }
         })
-        
+
     } catch (error) {
         console.log(error.message)
     }
 
 }
 
-const loadRegister = async(req, res) =>{
+const loadRegister = async (req, res) => {
     try {
-
         res.render('registration')
-        
+
     } catch (error) {
         console.log(error.message)
     }
 }
 
-const insertUser = async(req, res)=>{
+const insertUser = async (req, res) => {
 
     try {
 
         const spassword = await securePassword(req.body.password)
 
         const user = new User({
-            name : req.body.name,
-            email : req.body.email,
-            phone : req.body.mno,
-            password : spassword,
-            regNo : req.body.regNo,
-            is_admin : 0
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.mno,
+            password: spassword,
+            reg_no: req.body.regNo,
+            is_admin: 0
         })
 
         const userData = await user.save()
 
-        if(userData){
+        if (userData) {
             sendVerifyMail(req.body.name, req.body.email, userData._id)
-            res.render('registration', {message: "Your registration has been successful."})
+            res.render('registration', { message: "Your registration has been successful." })
         }
-        else{
-            res.render('registration', {message: "Your registration has failed!"})      
+        else {
+            res.render('registration', { message: "Your registration has failed!" })
         }
-        
+
     } catch (error) {
         console.log(error.message)
     }
 }
 
+const loadApplyHostel = async (req, res) => {
+    try {
+
+        res.render('apply-hostel')
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+//still not working (can't pass the hostel)
+
+const applyHostel = async (req, res) => {
+    try {
 
 
-const verifyMail = async(req, res)=>{
+        User.updateOne({ _id: req.session.user_id },
+            {
+                $set: {
+                    dept: req.body.dept, 
+                    semester: req.body.semester,
+                    address: req.body.address, 
+                    guardian_name: req.body.guardian_name, 
+                    guardian_phone: req.body.guardian_phone,
+                    "hostel_allocated.hostel_name": "asdasa",
+                    "hostel_allocated.room_no": 1
+
+
+                }
+            }, function (err, result) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(result);
+                    res.send('suceess')
+                }
+            });
+
+    } catch (error) {
+        console.log(error.message)
+    }
+
+}
+
+
+const verifyMail = async (req, res) => {
 
     try {
 
-        const updateInfo = await User.updateOne({_id: req.query.id}, {$set: { is_verified: 1}})
+        const updateInfo = await User.updateOne({ _id: req.query.id }, { $set: { is_verified: 1 } })
 
         console.log(updateInfo)
         res.render("email-verified")
-        
+
     } catch (error) {
         console.log(error.message)
     }
@@ -111,88 +188,88 @@ const verifyMail = async(req, res)=>{
 
 //login user method started
 
-const loginLoad = async(req, res)=>{
+const loginLoad = async (req, res) => {
 
     try {
 
         res.render('login')
-        
+
     } catch (error) {
-       console.log(error.message) 
+        console.log(error.message)
     }
 
 }
 
-const verifyLogin = async(req, res)=>{
+const verifyLogin = async (req, res) => {
 
     try {
-        
+
         const email = req.body.email
         const password = req.body.password
-        
-        const userData = await User.findOne({email:email})
 
-        if(userData){
+        const userData = await User.findOne({ email: email })
+
+        if (userData) {
 
             const passwordMatch = await bcrypt.compare(password, userData.password)
 
-            if(passwordMatch){
+            if (passwordMatch) {
 
-                if(userData.is_verified === 0){
-                    res.render('login',{message: "Please verify your mail."})
-                }else{
+                if (userData.is_verified === 0) {
+                    res.render('login', { message: "Please verify your mail." })
+                } else {
                     req.session.user_id = userData._id
                     res.redirect('/home')
                 }
 
-            }else{
-                res.render('login', {message:"Incorrect Email/Password."})
+            } else {
+                res.render('login', { message: "Incorrect Email/Password." })
             }
 
-        }else{
-            res.render('login', {message:"Incorrect Email/Password."})
+        } else {
+            res.render('login', { message: "Incorrect Email/Password." })
         }
 
     } catch (error) {
-       console.log(error.message) 
+        console.log(error.message)
     }
 
 }
 
-const loadHome = async(req, res)=>{
+const loadHome = async (req, res) => {
 
 
     try {
 
-        const userData = await User.findById({_id: req.session.user_id})
-        res.render('home', { user: userData})
+        const userData = await User.findById({ _id: req.session.user_id })
+        res.render('home', { user: userData })
     } catch (error) {
         console.log(error.message)
     }
 }
 
-const userLogout = async(req, res)=>{
+const userLogout = async (req, res) => {
 
     try {
 
         req.session.destroy()
         res.redirect('/')
-        
+
     } catch (error) {
         console.log(error.message)
     }
 }
 
-const editLoad = async(req, res)=>{
+const editLoad = async (req, res) => {
 
     try {
-        const id = req.query.id 
+        const id = req.query.id
 
-        const userData = await User.findById({ _id:id })
+        const userData = await User.findById({ _id: id })
 
-        if(userData){
-            res.render('edit', {user: userData})
-        }else{
+        if (userData) {
+            res.render('edit', { user: userData })
+        } else {
             res.redirect('/home')
         }
 
@@ -201,20 +278,20 @@ const editLoad = async(req, res)=>{
     }
 }
 
-const updateProfile = async(req, res) =>{
+const updateProfile = async (req, res) => {
 
     try {
-     
-            if(req.file){
-                const userData = await User.findByIdAndUpdate({_id: req.body.user_id}, {$set: {name: req.body.name, email: req.body.email, phone: req.body.mno}})
-            }else{
-                const userData = await User.findByIdAndUpdate({_id: req.body.user_id}, {$set: {name: req.body.name, email: req.body.email, phone: req.body.mno}})
-            }
 
-        
+        if (req.file) {
+            const userData = await User.findByIdAndUpdate({ _id: req.body.user_id }, { $set: { name: req.body.name, email: req.body.email, phone: req.body.mno } })
+        } else {
+            const userData = await User.findByIdAndUpdate({ _id: req.body.user_id }, { $set: { name: req.body.name, email: req.body.email, phone: req.body.mno } })
+        }
+
+
 
         res.redirect('/home')
-        
+
     } catch (error) {
         console.log(error.message)
     }
@@ -222,11 +299,13 @@ const updateProfile = async(req, res) =>{
 
 module.exports = {
     loadRegister,
+    applyHostel,
+    loadApplyHostel,
     insertUser,
     verifyMail,
     loginLoad,
     verifyLogin,
-    loadHome ,
+    loadHome,
     userLogout,
     editLoad,
     updateProfile

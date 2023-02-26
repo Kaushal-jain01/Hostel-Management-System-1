@@ -54,8 +54,15 @@ user_route.get('/home', auth.isLogin, userController.loadHome)
 
 user_route.get('/logout', auth.isLogin, userController.userLogout)
 
+user_route.get('/apply-hostel', auth.isLogin, userController.loadApplyHostel)
+
+user_route.post("/apply-hostel", auth.isLogin, userController.applyHostel)
+
 user_route.get('/edit', auth.isLogin, userController.editLoad)
 
 user_route.post('/edit', upload.single('image') ,userController.updateProfile)
+
+
+
 
 module.exports = user_route

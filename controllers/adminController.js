@@ -2,6 +2,7 @@ const User = require('../models/userModel')
 const Hostel = require('../models/hostelModel')
 const bcrypt = require('bcrypt')
 
+
 const loadLogin = async (req, res) => {
 
     try {
@@ -24,7 +25,7 @@ const verifyLogin = async (req, res) => {
             if (passwordMatch) {
 
                 if (userData.is_admin === 0) {
-                    res.render('login', { message: "Email and password is incorrect" })
+                    res.render('login', { message: "Not an admin" })
                 }
                 else {
                     req.session.user_id = userData._id
@@ -91,6 +92,7 @@ const insertHostel = async (req, res) => {
 
 
     try {
+        
 
         cap = req.body.capacity
 

@@ -1,37 +1,67 @@
 const mongoose = require('mongoose')
 
+const hostelSchema = mongoose.Schema({
+    hostel_name: {
+        type: String,
+        default: 'None'
+    },
+    room_no: {
+        type: Number,
+        default: 0
+    }
+
+})
+
 const userSchema = mongoose.Schema({
 
-    name:{
+    name: {
         type: String,
         required: true
     },
-    email:{
+    email: {
         type: String,
         required: true
     },
-    phone:{
+    reg_no: {
         type: String,
         required: true
     },
-    password:{
+    phone: {
         type: String,
         required: true
     },
-    regNo : {
+    password: {
         type: String,
         required: true
     },
-    is_admin:{
+    dept: {
+        type: String
+    },
+    semester: {
+        type: String
+    },
+    guardian_name: {
+        type: String
+    },
+    guardian_phone: {
+        type: String
+    },
+    address: {
+        type: String
+    },
+    is_admin: {
         type: Number,
         required: true
     },
-    is_verified:{
+    is_verified: {
         type: Number,
-        default:1
-    }
+        default: 1
+    },
+    hostel_allocated: { hostelSchema }
 
 })
 
 
 module.exports = mongoose.model('User', userSchema)
+
+
