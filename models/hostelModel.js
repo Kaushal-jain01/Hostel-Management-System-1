@@ -32,6 +32,10 @@ const hostelSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    type: {
+        type: String,
+        required: true
+    },
     vacancy: {
         type: Number,
         default: 1      

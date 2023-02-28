@@ -1,35 +1,37 @@
 <% include('../layouts/header') %>
 
-<h1>Add Hostel data</h1>
+    <h1>Add Hostel data</h1>
 
-<form action="" method="post" >
-    <input type="text" name="name" placeholder="Enter Name" required>
-    <br><br>
+    <form action="" method="post">
+        <input type="text" name="name" placeholder="Enter Name" required>
+        <br><br>
 
-    <input type="text" name="address" placeholder="Enter address" required>
-    <br><br>
+        <input type="text" name="address" placeholder="Enter address" required>
+        <br><br>
 
-    <input type="text" name="contact" placeholder="Enter Phone No." required>
-    <br><br>
+        <input type="text" name="contact" placeholder="Enter Phone No." required>
+        <br><br>
 
-    <input type="number" name="capacity" placeholder="Enter capacity" required>
-    <br><br>
+        <input type="number" name="capacity" placeholder="Enter capacity" required>
+        <br><br>
 
-    <input type="submit" value="Create">
+        <select type="text" name="type" placeholder="Select the type of hostel" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>  
+            <br><br>
 
-</form>
+            <input type="submit" value="Create">
 
-<% 
+    </form>
 
-    if(typeof message!== 'undefined'){
-    %>
+    <% if(typeof message!=='undefined' ){ %>
 
-    <h3 style="color: green"> <%= message %> </h3>
+        <h3 style="color: green">
+            <%= message %>
+        </h3>
 
-        <% 
-    }
-
-%>
+        <% } %>
 
 
-<% include('../layouts/footer') %>
+            <% include('../layouts/footer') %>

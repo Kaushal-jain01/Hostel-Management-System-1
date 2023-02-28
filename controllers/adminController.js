@@ -111,6 +111,7 @@ const insertHostel = async (req, res) => {
             address: req.body.address,
             capacity: req.body.capacity,
             vacancy: req.body.capacity,
+            type: req.body.type,
             contact: req.body.contact,
             rooms: rooms
 
