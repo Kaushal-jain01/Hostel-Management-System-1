@@ -38,6 +38,10 @@ const userSchema = mongoose.Schema({
     address: {
         type: String
     },
+    gender: {
+        type:String,
+        required: true
+    },
     is_admin: {
         type: Number,
         required: true
