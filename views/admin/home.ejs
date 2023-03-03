@@ -1,14 +1,10 @@
-<% include('../layouts/header.ejs') %>
-
+<body>
 <h1>Welcome <%= admin.name  %> </h1>
 
 <a href="/admin/dashboard">Dashboard</a>
 
 <table style="width: 50%">
 
-    <tr>
-        <td> <img src="/userImages/<%= admin.image %>" width="100px" height="100px" alt="<%= admin.image %>"> </td>
-    </tr>
 
     <tr>
         <td>Name</td>
@@ -27,3 +23,4 @@
 
 <br><br>
 <a href="/admin/addHostel">Create Hostel</a>
+</body>

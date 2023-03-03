@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 
 
-const randomHostel = async (reg_no, gender) => {
+const randomHostel = async (reg_no, gender, name) => {
     try {
 
         var boys_hos = []
@@ -26,7 +26,7 @@ const randomHostel = async (reg_no, gender) => {
             }
             
         })
-        var allocatedHostel
+        var allocatedHostel = ""
 
         if(gender=="male"){
             allocatedHostel = boys_hos[Math.floor(Math.random() * boys_hos.length)];
@@ -51,7 +51,8 @@ const randomHostel = async (reg_no, gender) => {
             { name: allocatedHostel, "rooms.room_no": allocatedRoom },
             { $set: { 
                 "rooms.$.vacant":  false,
-                "rooms.$.student_allocated": reg_no,
+                "rooms.$.student_reg_no": reg_no,
+                "rooms.$.student_allocated": name,
                 vacancy: vacan - 1
          } }
           )
@@ -177,8 +178,8 @@ const loadApplyHostel = async (req, res) => {
 const applyHostel = async (req, res) => {
     try {
 
-        const randHostel = await randomHostel(req.body.reg_no, req.session.gender)
-        console.log(req.body.reg_no)
+        const randHostel = await randomHostel(req.body.reg_no, req.body.gender, req.body.name)
+        console.log(req.body.gender)
 
         User.updateOne({ _id: req.session.user_id },
             {

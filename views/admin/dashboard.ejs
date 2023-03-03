@@ -1,4 +1,4 @@
-<% include('../layouts/header.ejs') %>
+<body>
 
 <style>
     table,
@@ -76,7 +76,7 @@
   <tbody>
     <% hostels.forEach(function(hostel) { %>
       <tr>
-        <td><%= hostel.name %></td>
+        <td><a href="/admin/hostel-details?id=<%= hostel.name%>"><%= hostel.name %></a></td>
         <td><%= hostel.address %></td>
         <td><%= hostel.contact %></td>
         <td><%= hostel.rooms.length %></td>
@@ -88,4 +88,4 @@
 
 <a href="/admin/home">Go to Home</a>
 
-<% include('../layouts/header.ejs') %>
+</body>

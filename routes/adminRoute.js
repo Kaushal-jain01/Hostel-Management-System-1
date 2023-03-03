@@ -21,15 +21,17 @@ admin_route.get('/', auth.isLogout, adminController.loadLogin)
 
 admin_route.post('/', adminController.verifyLogin)
 
-admin_route.get('/home', auth.isLogin , adminController.loadDashboard)
+admin_route.get('/home', auth.isLogin , adminController.loadHome)
 
 admin_route.get('/logout' , auth.isLogin , adminController.logout)
 
-admin_route.get('/dashboard', auth.isLogin , adminController.adminDashboard)
+admin_route.get('/dashboard', auth.isLogin , adminController.loadDashboard)
 
 admin_route.get('/addHostel', auth.isLogin, adminController.loadAddHostel)
 
 admin_route.post('/addHostel', auth.isLogin, adminController.insertHostel )
+
+admin_route.get('/hostel-details', auth.isLogin, adminController.loadHostelDetails )
 
 admin_route.get('*', function(req, res){
     res.redirect('/admin')

@@ -46,7 +46,7 @@ const verifyLogin = async (req, res) => {
 }
 
 
-const loadDashboard = async (req, res) => {
+const loadHome = async (req, res) => {
 
     try {
         const userData = await User.findById({ _id: req.session.user_id })
@@ -66,7 +66,7 @@ const logout = async (req, res) => {
     }
 }
 
-const adminDashboard = async (req, res) => {
+const loadDashboard = async (req, res) => {
 
     try {
 
@@ -82,6 +82,19 @@ const loadAddHostel = async (req, res) => {
 
     try {
         res.render('addHostel')
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const loadHostelDetails = async (req, res) => {
+
+    try {
+        const hostelName = req.query.id 
+        Hostel.findOne({name: hostelName})
+        .then((hostel)=> {
+                res.render('hostel-details', {hostelData: hostel})
+        })
     } catch (error) {
         console.log(error.message)
     }
@@ -135,9 +148,10 @@ const insertHostel = async (req, res) => {
 module.exports = {
     loadLogin,
     verifyLogin,
-    loadDashboard,
+    loadHome,
     logout,
-    adminDashboard,
+    loadDashboard,
     insertHostel,
-    loadAddHostel
+    loadAddHostel,
+    loadHostelDetails
 }

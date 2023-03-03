@@ -1,0 +1,33 @@
+<body>
+<style>
+    table,
+    th,
+    td {
+      padding: 10px;
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+  </style>
+
+<h1> Details</h1>
+<table width="70%">
+    <thead>
+      <tr>
+        <th>Room No</th>
+        <th>Reg No</th>
+        <th>Student Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% hostelData.rooms.forEach(function(hostel) { %>
+        <tr>
+          <td><%= hostel.room_no %></td>
+          <!-- will need to fix this -->
+          <td><a href="/admin/dashboard"><%= hostel.student_allocated %><a></td>
+          <td><%= hostel.student_reg_no %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+</body>

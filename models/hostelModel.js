@@ -14,6 +14,11 @@ const roomSchema = new mongoose.Schema({
     student_allocated: {
         type: String,
         default: ""
+    },
+
+    student_reg_no: {
+        type: String,
+        default: ""
     }
 });
 
@@ -47,9 +52,6 @@ const hostelSchema = mongoose.Schema({
     rooms:[roomSchema]
 
 })
-
-
-module.exports =  mongoose.model('Hostel', hostelSchema);
 
 const Hostel = mongoose.model('Hostel', hostelSchema);
 
