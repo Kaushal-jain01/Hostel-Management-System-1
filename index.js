@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/hostel-management')
+mongoose.connect('mongodb://127.0.0.1:27017/hostel-mgmt')
 
 const port = 3000 || process.env.PORT
 

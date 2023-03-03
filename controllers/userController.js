@@ -5,10 +5,11 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 
 
-const randomHostel = async (reg_no) => {
+const randomHostel = async (reg_no, gender) => {
     try {
 
-        var hos = []
+        var boys_hos = []
+        var girls_hos = []
         var rooms = []
         var vacan = 0
 
@@ -16,12 +17,23 @@ const randomHostel = async (reg_no) => {
         hostelsData.forEach(function (hostel) {
             vacan = hostel.vacancy //existing vacancy
             if(hostel.vacancy){
-                hos.push(hostel.name)
+                if(hostel.type=="male")
+                { 
+                    boys_hos.push(hostel.name)
+                }else{
+                    girls_hos.push(hostel.name)
+                }
             }
             
         })
+        var allocatedHostel
 
-        var allocatedHostel = hos[Math.floor(Math.random() * hos.length)];
+        if(gender=="male"){
+            allocatedHostel = boys_hos[Math.floor(Math.random() * boys_hos.length)];
+        }
+        else{
+            allocatedHostel = girls_hos[Math.floor(Math.random() * girls_hos.length)];
+        }
 
         await Hostel.findOne({ name: allocatedHostel }).then((hostel) => {
             hostel.rooms.forEach(function (room) {
@@ -131,6 +143,7 @@ const insertUser = async (req, res) => {
             phone: req.body.mno,
             password: spassword,
             reg_no: req.body.regNo,
+            gender: req.body.gender,
             is_admin: 0
         })
 
@@ -164,7 +177,7 @@ const loadApplyHostel = async (req, res) => {
 const applyHostel = async (req, res) => {
     try {
 
-        const randHostel = await randomHostel(req.body.reg_no)
+        const randHostel = await randomHostel(req.body.reg_no, req.session.gender)
         console.log(req.body.reg_no)
 
         User.updateOne({ _id: req.session.user_id },
