@@ -101,6 +101,20 @@ const loadHostelDetails = async (req, res) => {
 }
 
 
+
+const loadUserDetails = async(req, res) =>{
+
+    try{
+        const userName = req.query.id 
+        const users = await User.find({name: userName}).exec()
+        res.render('user-details', {userData: users})
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
+
+
 const insertHostel = async (req, res) => {
 
 
@@ -153,5 +167,6 @@ module.exports = {
     loadDashboard,
     insertHostel,
     loadAddHostel,
-    loadHostelDetails
+    loadHostelDetails,
+    loadUserDetails
 }

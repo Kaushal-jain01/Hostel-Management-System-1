@@ -4,9 +4,11 @@
     th,
     td {
       padding: 10px;
+      text-align: center;
       border: 1px solid black;
       border-collapse: collapse;
     }
+
   </style>
 
 <h1> Details</h1>
@@ -14,8 +16,9 @@
     <thead>
       <tr>
         <th>Room No</th>
-        <th>Reg No</th>
+        
         <th>Student Name</th>
+        <th>Reg No</th>
       </tr>
     </thead>
     <tbody>
@@ -23,7 +26,7 @@
         <tr>
           <td><%= hostel.room_no %></td>
           <!-- will need to fix this -->
-          <td><a href="/admin/dashboard"><%= hostel.student_allocated %><a></td>
+          <td><a href="/admin/user-details/?id=<%= hostel.student_allocated %>"><%= hostel.student_allocated %><a></td>
           <td><%= hostel.student_reg_no %></td>
         </tr>
       <% }); %>
