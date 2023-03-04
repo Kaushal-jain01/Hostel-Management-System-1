@@ -25,8 +25,7 @@
       <% hostelData.rooms.forEach(function(hostel) { %>
         <tr>
           <td><%= hostel.room_no %></td>
-          <!-- will need to fix this -->
-          <td><a href="/admin/user-details/?id=<%= hostel.student_allocated %>"><%= hostel.student_allocated %><a></td>
+          <td><a href="/admin/user-details/?id=<%= hostel.student_reg_no %>"><%= hostel.student_allocated %><a></td>
           <td><%= hostel.student_reg_no %></td>
         </tr>
       <% }); %>

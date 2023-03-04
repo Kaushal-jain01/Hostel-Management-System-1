@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 
 
-const randomHostel = async (reg_no, gender, name) => {
+const randomHostel = async (reg_no, gender, name, session_key) => {
     try {
 
         var boys_hos = []
@@ -13,6 +13,7 @@ const randomHostel = async (reg_no, gender, name) => {
         var rooms = []
         var vacan = 0
 
+        const userData = await User.findOne({_id: session_key})
         const hostelsData = await Hostel.find({})
         hostelsData.forEach(function (hostel) {
             vacan = hostel.vacancy //existing vacancy
@@ -28,40 +29,54 @@ const randomHostel = async (reg_no, gender, name) => {
         })
         var allocatedHostel = ""
 
-        if(gender=="male"){
-            allocatedHostel = boys_hos[Math.floor(Math.random() * boys_hos.length)];
-        }
-        else{
-            allocatedHostel = girls_hos[Math.floor(Math.random() * girls_hos.length)];
-        }
 
-        await Hostel.findOne({ name: allocatedHostel }).then((hostel) => {
-            hostel.rooms.forEach(function (room) {
-                if(room.vacant){
-                    rooms.push(room.room_no)
-                }
+        console.log(`data ************** ${userData} ************* \n`)
+
+        if (userData.hostel_allocated.hostel_name == 'None'){
+            if(gender=="male"){
+                allocatedHostel = boys_hos[Math.floor(Math.random() * boys_hos.length)];
+            }
+            else{
+                allocatedHostel = girls_hos[Math.floor(Math.random() * girls_hos.length)];
+            }
+    
+            await Hostel.findOne({ name: allocatedHostel }).then((hostel) => {
+                hostel.rooms.forEach(function (room) {
+                    if(room.vacant){
+                        rooms.push(room.room_no)
+                    }
+                })
             })
-        })
+    
+            var allocatedRoom = rooms[Math.floor(Math.random() * rooms.length)];
+    
+            //updating hostel vacancies and student allocated
+    
+            await Hostel.updateOne(
+                { name: allocatedHostel, "rooms.room_no": allocatedRoom },
+                { $set: { 
+                    "rooms.$.vacant":  false,
+                    "rooms.$.student_reg_no": reg_no,
+                    "rooms.$.student_allocated": name,
+                    vacancy: vacan - 1
+             } }
+              )
+    
+            allocatedData = ({
+                'hostel_name': allocatedHostel,
+                'room_no': allocatedRoom
+            })
 
-        var allocatedRoom = rooms[Math.floor(Math.random() * rooms.length)];
+            return allocatedData
+        } 
+        else {
+            return false
+        }
 
-        //updating hostel vacancies and student allocated
 
-        await Hostel.updateOne(
-            { name: allocatedHostel, "rooms.room_no": allocatedRoom },
-            { $set: { 
-                "rooms.$.vacant":  false,
-                "rooms.$.student_reg_no": reg_no,
-                "rooms.$.student_allocated": name,
-                vacancy: vacan - 1
-         } }
-          )
 
-        allocatedData = ({
-            'hostel_name': allocatedHostel,
-            'room_no': allocatedRoom
-        })
-        return allocatedData
+        
+        
 
     } catch (error) {
         console.log(error.message)
@@ -178,29 +193,35 @@ const loadApplyHostel = async (req, res) => {
 const applyHostel = async (req, res) => {
     try {
 
-        const randHostel = await randomHostel(req.body.reg_no, req.body.gender, req.body.name)
+        const randHostel = await randomHostel(req.body.reg_no, req.body.gender, req.body.name, req.session.user_id)
         console.log(req.body.gender)
 
-        User.updateOne({ _id: req.session.user_id },
-            {
-                $set: {
-                    dept: req.body.dept,
-                    semester: req.body.semester,
-                    address: req.body.address,
-                    guardian_name: req.body.guardian_name,
-                    guardian_phone: req.body.guardian_phone,
-                    hostel_allocated: randHostel
+        if (!randHostel){
+            res.send("You have already been allocated") 
+        } else {
+            User.updateOne({ _id: req.session.user_id },
+                {
+                    $set: {
+                        dept: req.body.dept,
+                        semester: req.body.semester,
+                        address: req.body.address,
+                        guardian_name: req.body.guardian_name,
+                        guardian_phone: req.body.guardian_phone,
+                        hostel_allocated: randHostel
+    
+    
+                    }
+                }, function (err, result) {
+                    if (err) {
+                        console.log(`error ${err}`);
+                    } else {
+                        console.log(result);
+                        res.send(`You have been allocated at ${randHostel.hostel_name} room no ${randHostel.room_no}`)
+                    }
+                });
+        }
 
-
-                }
-            }, function (err, result) {
-                if (err) {
-                    console.log(`error ${err}`);
-                } else {
-                    console.log(result);
-                    res.send(`You have been allocated at ${randHostel.hostel_name} room no ${randHostel.room_no}`)
-                }
-            });
+        
 
     } catch (error) {
         console.log(`errrrro ${error.message}`)

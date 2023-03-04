@@ -105,8 +105,8 @@ const loadHostelDetails = async (req, res) => {
 const loadUserDetails = async(req, res) =>{
 
     try{
-        const userName = req.query.id 
-        const users = await User.find({name: userName}).exec()
+        const regNo = req.query.id 
+        const users = await User.find({reg_no: regNo}).exec()
         res.render('user-details', {userData: users})
     }catch(error){
         console.log(error.message)
