@@ -33,6 +33,8 @@ admin_route.post('/addHostel', auth.isLogin, adminController.insertHostel )
 
 admin_route.get('/hostel-details', auth.isLogin, adminController.loadHostelDetails )
 
+admin_route.get('/user-details', auth.isLogin, adminController.loadUserDetails )
+
 admin_route.get('*', function(req, res){
     res.redirect('/admin')
 })
