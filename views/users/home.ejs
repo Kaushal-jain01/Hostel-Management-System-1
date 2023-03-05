@@ -1,4 +1,14 @@
 <body>
+    <style>
+        table,
+        th,
+        td {
+          padding: 10px;
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+      </style>
+      
 
 <h1>Welcome <%= user.name %> <br></h1>
 
@@ -21,10 +31,39 @@
         <td> <%= user.phone %> </td>
     </tr>
 
+    <tr>
+        <td> Hostel </td>
+        
+        <td>
+            <% if (user.hostel_allocated.hostel_name !== 'None') { %>  
+                <%= user.hostel_allocated.hostel_name %>
+            <% } else { %>
+                N/A
+            <% } %>
+        </td>
+    </tr>
+
+    <tr>
+        <td> Room no. </td>
+      
+    <td> <% if (user.hostel_allocated.room_no !== 0) { %>  
+            <%= user.hostel_allocated.room_no %>
+            <% } else { %>
+                N/A
+            <% } %> </td>
+    </tr>
+
+
 </table>
 
+<br>
 <a href="/edit?id=<%= user._id%>">Edit</a>
+<br>
 <a href="/apply-hostel">Apply for hostel</a>
+<br>
+<a href="/complaints">Submit Complaint</a>
+<br>
 <a href="/logout">Logout</a>
+
 
 </body>
