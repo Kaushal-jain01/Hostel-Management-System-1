@@ -370,6 +370,7 @@ const saveComplaint = async (req, res) => {
       const newComplaint = new Complaint({
         title: req.body.title,
         description: req.body.description,
+        hostelName: req.body.hostelName,
         submittedBy: req.body.submittedBy
       });
   

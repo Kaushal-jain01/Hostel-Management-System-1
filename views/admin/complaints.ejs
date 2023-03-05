@@ -3,8 +3,9 @@
 <ul>
   <% complaintList.forEach(function(complaint) { %>
     <li>
-      <h2><%= complaint.title %></h2>
-      <p><%= complaint.description %></p>
+      <h5>Complaint title: <%= complaint.title %></h5>
+      <p>Description: <%= complaint.description %></p>
+      <p>Hostel name: <%= complaint.hostelName %></p>
       <p>Submitted by: <%= complaint.submittedBy %></p>
     </li>
   <% }); %>

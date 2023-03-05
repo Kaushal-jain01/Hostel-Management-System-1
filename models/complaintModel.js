@@ -10,6 +10,10 @@ const complaintSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  hostelName: {
+    type: String,
+    required: true
+  },
   submittedBy: {
     type: String,
     required: true
