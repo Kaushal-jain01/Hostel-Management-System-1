@@ -12,7 +12,8 @@ const complaintSchema = new mongoose.Schema({
   },
   hostelName: {
     type: String,
-    required: true
+    required: true,
+    default: "NA"
   },
   submittedBy: {
     type: String,

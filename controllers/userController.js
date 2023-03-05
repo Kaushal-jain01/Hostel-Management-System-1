@@ -370,17 +370,17 @@ const saveComplaint = async (req, res) => {
       const newComplaint = new Complaint({
         title: req.body.title,
         description: req.body.description,
-        hostelName: req.body.hostelName,
+        hostelName: (await User.findOne({ _id: req.session.user_id})).hostel_allocated.hostel_name,
         submittedBy: req.body.submittedBy
       });
-  
+    
       // Save the complaint to the database
       newComplaint.save(err => {
         if (err) {
           console.log(err);
           res.send('An error occurred while submitting your complaint.');
         } else {
-          res.redirect('/complaints');
+          res.redirect('/home');
         }
       });
     } catch (error) {
