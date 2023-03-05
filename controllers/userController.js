@@ -138,7 +138,6 @@ const loadRegister = async (req, res) => {
     try {
 
         //using this for testing
-        const randHostel = await randomHostel(2002)
         console.log(randHostel)
         res.render('registration')
 
@@ -163,15 +162,12 @@ const insertUser = async (req, res) => {
             is_admin: 0
         })
 
-        const userData = await user.save()
+        if(await User.findOne({reg_no : req.body.reg_no}) || await User.findOne({email: req.body.email})){
+            res.send("A user with the same registration no or email is already registered")
+        } else {
+            await user.save()
+        }
 
-        if (userData) {
-            sendVerifyMail(req.body.name, req.body.email, userData._id)
-            res.render('registration', { message: "Your registration has been successful." })
-        }
-        else {
-            res.render('registration', { message: "Your registration has failed!" })
-        }
 
     } catch (error) {
         console.log(error.message)
@@ -189,38 +185,40 @@ const loadApplyHostel = async (req, res) => {
 }
 
 //got it working
-
 const applyHostel = async (req, res) => {
     try {
 
         const randHostel = await randomHostel(req.body.reg_no, req.body.gender, req.body.name, req.session.user_id)
-        console.log(req.body.gender)
 
-        if (!randHostel){
-            res.send("You have already been allocated") 
-        } else {
-            User.updateOne({ _id: req.session.user_id },
-                {
-                    $set: {
-                        dept: req.body.dept,
-                        semester: req.body.semester,
-                        address: req.body.address,
-                        guardian_name: req.body.guardian_name,
-                        guardian_phone: req.body.guardian_phone,
-                        hostel_allocated: randHostel
-    
-    
-                    }
-                }, function (err, result) {
-                    if (err) {
-                        console.log(`error ${err}`);
-                    } else {
-                        console.log(result);
-                        res.send(`You have been allocated at ${randHostel.hostel_name} room no ${randHostel.room_no}`)
-                    }
-                });
+        if(await User.findOne({reg_no : req.body.reg_no})){
+            console.log(User.reg_no)
+            if (!randHostel){
+                res.send("You have already been allocated") 
+            } else {
+                User.updateOne({ _id: req.session.user_id },
+                    {
+                        $set: {
+                            dept: req.body.dept,
+                            semester: req.body.semester,
+                            address: req.body.address,
+                            guardian_name: req.body.guardian_name,
+                            guardian_phone: req.body.guardian_phone,
+                            hostel_allocated: randHostel
+        
+        
+                        }
+                    }, function (err, result) {
+                        if (err) {
+                            console.log(`error ${err}`);
+                        } else {
+                            console.log(result);
+                            res.send(`You have been allocated at ${randHostel.hostel_name} room no ${randHostel.room_no}`)
+                        }
+                    });
+            }
+        }else{
+            res.send("Invalid Reg no.")
         }
-
         
 
     } catch (error) {
