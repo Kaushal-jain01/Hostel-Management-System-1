@@ -1,5 +1,6 @@
 const User = require('../models/userModel')
 const Hostel = require('../models/hostelModel')
+const Complaint = require('../models/complaintModel')
 const bcrypt = require('bcrypt')
 
 
@@ -77,6 +78,32 @@ const loadDashboard = async (req, res) => {
         console.log(error.message)
     }
 }
+
+const loadUsersList = async (req, res) => {
+
+    try {
+
+        const usersData = await User.find({ is_admin: 0 })
+        
+        res.render('users-list', { users: usersData })
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const loadHostelsList = async (req, res) => {
+
+    try {
+
+        const hostelsData = await Hostel.find({})
+        
+        res.render('hostels-list', { hostels: hostelsData })
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
 
 const loadAddHostel = async (req, res) => {
 
@@ -159,6 +186,22 @@ const insertHostel = async (req, res) => {
     }
 }
 
+const loadComplaints = async (req, res) => {
+    try {
+      Complaint.find({}, (err, complaintList) => {
+        if (err) {
+          console.log(err);
+          res.send('An error occurred while retrieving complaints.');
+        } else {
+          res.render('complaints', { complaintList: complaintList });
+        }
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+};
+  
+
 module.exports = {
     loadLogin,
     verifyLogin,
@@ -168,5 +211,8 @@ module.exports = {
     insertHostel,
     loadAddHostel,
     loadHostelDetails,
-    loadUserDetails
+    loadUserDetails,
+    loadHostelsList,
+    loadUsersList,
+    loadComplaints
 }

@@ -62,7 +62,9 @@ user_route.get('/edit', auth.isLogin, userController.editLoad)
 
 user_route.post('/edit', upload.single('image') ,userController.updateProfile)
 
+user_route.get('/complaints', auth.isLogin, userController.submitComplaint);
 
+user_route.post('/complaints', auth.isLogin, userController.saveComplaint)
 
 
 module.exports = user_route

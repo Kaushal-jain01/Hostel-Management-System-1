@@ -1,0 +1,13 @@
+<h1>Complaints</h1>
+
+<ul>
+  <% complaintList.forEach(function(complaint) { %>
+    <li>
+      <h2><%= complaint.title %></h2>
+      <p><%= complaint.description %></p>
+      <p>Submitted by: <%= complaint.submittedBy %></p>
+    </li>
+  <% }); %>
+</ul>
+
+

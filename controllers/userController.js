@@ -1,5 +1,6 @@
 const User = require('../models/userModel')
 const Hostel = require('../models/hostelModel')
+const Complaint = require('../models/complaintModel');
 const bcrypt = require('bcrypt')
 
 const nodemailer = require('nodemailer')
@@ -137,8 +138,8 @@ const sendVerifyMail = async (name, email, user_id) => {
 const loadRegister = async (req, res) => {
     try {
 
-        //using this for testing
-        console.log(randHostel)
+       
+       
         res.render('registration')
 
     } catch (error) {
@@ -353,6 +354,40 @@ const updateProfile = async (req, res) => {
     }
 }
 
+const submitComplaint = async( req, res) => {
+    try {
+
+        res.render('complaints')
+    } catch (error) {
+        console.log(error.message)
+    }
+
+}
+
+const saveComplaint = async (req, res) => {
+    try {
+      // Create a new complaint object with data from the request body
+      const newComplaint = new Complaint({
+        title: req.body.title,
+        description: req.body.description,
+        submittedBy: req.body.submittedBy
+      });
+  
+      // Save the complaint to the database
+      newComplaint.save(err => {
+        if (err) {
+          console.log(err);
+          res.send('An error occurred while submitting your complaint.');
+        } else {
+          res.redirect('/complaints');
+        }
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  
+
 module.exports = {
     loadRegister,
     applyHostel,
@@ -364,5 +399,7 @@ module.exports = {
     loadHome,
     userLogout,
     editLoad,
-    updateProfile
+    updateProfile,
+    submitComplaint,
+    saveComplaint
 }
