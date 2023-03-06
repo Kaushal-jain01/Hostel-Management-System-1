@@ -1,5 +1,16 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/hostel-management')
+require('dotenv').config();
+
+const process = require('process');
+const password = process.env.MONGOPASSWORD
+const username = process.env.MONGOUSERNAME
+
+console.log(username)
+mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/?retryWrites=true&w=majority`,
+    {
+        useNewUrlParser: true,     
+        useUnifiedTopology: true
+    })
 
 const port = 3000 || process.env.PORT
 
