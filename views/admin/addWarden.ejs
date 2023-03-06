@@ -1,0 +1,41 @@
+<body>
+
+    <h1>Add Warden data</h1>
+
+    <form action="" method="post">
+        <input type="text" name="name" placeholder="Enter Name" required>
+        <br><br>
+
+        <input type="text" name="phone" placeholder="Enter Phone" required>
+        <br><br>
+
+        <input type="text" name="address" placeholder="Enter address" required>
+        <br><br>
+
+        <input type="email" name="email" placeholder="Enter Email." required>
+        <br><br>
+
+        <input type="password" name="password" placeholder="Enter password" required>
+        <br><br>
+
+        <select type="text" name="hostel_name" placeholder="Select the name of hostel" required>
+            <option value="AT 8 BOYS HOSTEL">AT 8 BOYS HOSTEL</option>
+            <option value="AT 9 BOYS HOSTEL">AT 9 BOYS HOSTEL</option>
+        </select>  
+         
+            <br><br>
+
+            <input type="submit" value="Add">
+
+    </form>
+
+    <% if(typeof message!=='undefined' ){ %>
+
+        <h3 style="color: green">
+            <%= message %>
+        </h3>
+
+        <% } %>
+
+
+</body>

@@ -167,7 +167,10 @@ const insertUser = async (req, res) => {
             res.send("A user with the same registration no or email is already registered")
         } else {
             await user.save()
+            res.redirect('/')
         }
+
+        
 
 
     } catch (error) {

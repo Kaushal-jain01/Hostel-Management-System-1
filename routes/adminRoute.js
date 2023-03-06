@@ -41,6 +41,10 @@ admin_route.get('/user-details', auth.isLogin, adminController.loadUserDetails )
 
 admin_route.get('/viewComplaints', auth.isLogin, adminController.loadComplaints)
 
+admin_route.get('/addWarden', auth.isLogin, adminController.loadAddWarden)
+
+admin_route.post('/addWarden', auth.isLogin, adminController.addWarden )
+
 admin_route.get('*', function(req, res){
     res.redirect('/admin')
 })

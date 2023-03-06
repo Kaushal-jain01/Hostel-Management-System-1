@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const Hostel = require('../models/hostelModel')
 const Complaint = require('../models/complaintModel')
+const Warden = require('../models/wardenModel')
 const bcrypt = require('bcrypt')
 
 
@@ -175,7 +176,7 @@ const insertHostel = async (req, res) => {
 
         if (hostelData) {
 
-            res.render('addHostel', { message: "Hostel has been added." })
+            res.redirect('/admin/home')
         }
         else {
             res.render('addHostel', { message: "Process failed!" })
@@ -200,6 +201,60 @@ const loadComplaints = async (req, res) => {
       console.log(error.message);
     }
 };
+
+
+const securePassword = async (password) => {
+
+    try {
+
+        const passwordHash = await bcrypt.hash(password, 10)
+        return passwordHash
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const loadAddWarden = async(req, res) =>{
+
+    try{
+        res.render('addWarden')
+    }catch (error) {
+        console.log(error.message);
+      }
+}
+
+const addWarden = async (req, res) => {
+
+    try {
+        
+        const spassword = await securePassword(req.body.password)
+
+        const warden = new Warden({
+            name: req.body.name,
+            address: req.body.address,
+            email: req.body.email,
+            phone: req.body.phone,
+            password: spassword,
+            hostel_name : req.body.hostel_name
+
+        });
+
+        const wardenData = await warden.save()
+
+        if (wardenData) {
+
+            res.render('addWarden', { message: "Warden has been added." })
+        }
+        else {
+            res.render('/admin/home')
+        }
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
   
 
 module.exports = {
@@ -214,5 +269,7 @@ module.exports = {
     loadUserDetails,
     loadHostelsList,
     loadUsersList,
-    loadComplaints
+    loadComplaints,
+    addWarden,
+    loadAddWarden
 }
