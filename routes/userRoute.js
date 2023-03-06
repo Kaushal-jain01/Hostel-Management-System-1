@@ -64,7 +64,11 @@ user_route.post('/edit', upload.single('image') ,userController.updateProfile)
 
 user_route.get('/complaints', auth.isLogin, userController.submitComplaint);
 
-user_route.post('/complaints', auth.isLogin, userController.saveComplaint)
+user_route.post('/complaints', auth.isLogin, userController.saveComplaint);
+
+user_route.get('/vacateUser', auth.isLogin, userController.loadVacate);
+
+user_route.post('/vacateUser', auth.isLogin, userController.vacateUser);
 
 
 module.exports = user_route
