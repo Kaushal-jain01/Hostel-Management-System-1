@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 require('dotenv').config();
-
 const process = require('process');
+
 const password = process.env.MONGOPASSWORD
 const username = process.env.MONGOUSERNAME
+const PORT = 3000 || process.env.PORT
 
 console.log(username)
 mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/?retryWrites=true&w=majority`,
@@ -27,6 +28,10 @@ app.use('/', userRoute)
 const adminRoute = require('./routes/adminRoute')
 app.use('/admin', adminRoute)
 
+//for warden routes 
+const wardenRoute = require("./routes/wardenRoute")
+app.use('/warden', wardenRoute)
+
 app.listen(3000, function () {
-    console.log(`Server is running at http://127.0.0.1:${port}`)
+    console.log(`Server is running at http://127.0.0.1:${PORT}`)
 })
