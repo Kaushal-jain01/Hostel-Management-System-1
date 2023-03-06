@@ -387,6 +387,60 @@ const saveComplaint = async (req, res) => {
       console.log(error.message);
     }
   };
+
+const loadVacate = async( req, res) => {
+    try {
+
+        res.render('vacate')
+    } catch (error) {
+        console.log(error.message)
+    }
+
+}
+
+  
+const vacateUser = async (req, res) => {
+    try {
+      // Find the user and update in the database
+      await User.findByIdAndUpdate({ _id: req.session.user_id }, { $set: { "hostel_allocated.hostel_name": "None", "hostel_allocated.room_no": 0 } });
+
+      //const user = await User.findOne({ reg_no: req.body.regNo });
+  
+      // Find the hostel documents
+      const hostels = await Hostel.find({});
+
+      console.log(req.body.regNo)
+  
+      // Loop through each hostel document
+      for (let i = 0; i < hostels.length; i++) {
+        const hostel = hostels[i];
+  
+        // Loop through the rooms array and update the vacant and student_allocated fields
+        for (let j = 0; j < hostel.rooms.length; j++) {
+          const room = hostel.rooms[j];
+          if (room.student_reg_no === req.body.regNo) {
+            hostel.vacancy++;
+            room.vacant = true;
+            room.student_allocated = "";
+            room.student_reg_no = "";
+          }
+        }
+  
+        // Save the updated hostel document back to the database
+        await hostel.save();
+
+        
+      }
+  
+      res.send("User vacated successfully");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  
+  
+  
+
   
 
 module.exports = {
@@ -402,5 +456,7 @@ module.exports = {
     editLoad,
     updateProfile,
     submitComplaint,
-    saveComplaint
+    saveComplaint,
+    vacateUser,
+    loadVacate
 }
