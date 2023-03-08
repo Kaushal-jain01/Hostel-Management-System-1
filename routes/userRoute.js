@@ -70,5 +70,9 @@ user_route.get('/vacateUser', auth.isLogin, userController.loadVacate);
 
 user_route.post('/vacateUser', auth.isLogin, userController.vacateUser);
 
+user_route.get('/payment', auth.isLogin, userController.loadPayment)
+
+user_route.post('/payment', auth.isLogin, userController.makePayment)
+
 
 module.exports = user_route

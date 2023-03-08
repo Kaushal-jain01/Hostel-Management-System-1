@@ -4,6 +4,11 @@ const Complaint = require('../models/complaintModel');
 const bcrypt = require('bcrypt')
 
 const nodemailer = require('nodemailer')
+const PUBLISHABLE_KEY = 'pk_test_51MjI0OSCU5yTsDL8ehrVZDYo4tD5KSzqTzXZPmJQZelawlGfuew2feSCaQeux7ZXHxEruu3w8vpHr4ylq5GK64tV00WUb8yvNy'
+const SECRET_KEY = 'sk_test_51MjI0OSCU5yTsDL8qWYTbuqQQsQM4lXU6ru7VPNGjnCD7ILJGyec9AtB3rk31t5dzM3lcSxIowy35BkTcANdUsdQ00EOPWUxzv'
+
+
+const stripe = require('stripe')(SECRET_KEY)
 
 
 const randomHostel = async (reg_no, gender, name, session_key) => {
@@ -443,7 +448,52 @@ const vacateUser = async (req, res) => {
   
   
   
+const loadPayment = async (req, res) => {
+    try {
 
+        res.render('payment', {key: PUBLISHABLE_KEY})
+        // console.log(stripe.create)
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const makePayment = async (req, res) => {
+    try {
+
+        stripe.customers.create({
+            email: req.body.stripeEmail,
+            source: req.body.stripeToken,
+            name: "XYZ",
+            address: {
+                line1 : 'Lyon Estates, Hill Valley',
+                postal_code: '110092',
+                city: 'Guwahati',
+                state: 'Assam',
+                country: 'India'
+            }
+        }).then((customer)=>{
+                return stripe.paymentIntents.create({
+                amount: 5000,
+                description: 'Applying Hostel Room',
+                currency: 'USD',
+                customer: customer.id
+            })
+        }).then((charge)=>{
+            console.log(charge)
+            res.send("Success")
+        })
+        .catch((error)=>{
+            res.send(error.message)
+            console.log(error.message)
+        })
+
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
   
 
 module.exports = {
@@ -461,5 +511,7 @@ module.exports = {
     submitComplaint,
     saveComplaint,
     vacateUser,
-    loadVacate
+    loadVacate,
+    loadPayment,
+    makePayment
 }
