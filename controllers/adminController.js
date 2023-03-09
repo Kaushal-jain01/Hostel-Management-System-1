@@ -135,7 +135,7 @@ const loadUserDetails = async(req, res) =>{
 
     try{
         const regNo = req.query.id 
-        const users = await User.find({reg_no: regNo}).exec()
+        const users = await User.find({reg_no: regNo})
         res.render('user-details', {userData: users})
     }catch(error){
         console.log(error.message)

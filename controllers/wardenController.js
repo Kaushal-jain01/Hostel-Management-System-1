@@ -8,7 +8,11 @@ const bcrypt = require('bcrypt')
 const loadDashboard = async (req, res) => {
 
     try {
-        res.render('dashboard')
+        const wardenId = req.session.user_id
+        
+        const hostelData = await Warden.findOne({_id: wardenId})
+        
+        res.render('dashboard', {hostelName: hostelData.hostel_name})
     } catch (error) {
         console.log(error.message)
     }
@@ -68,13 +72,26 @@ const logout = async (req, res) => {
     }
 }
 
+const loadHostelDetails = async (req, res) => {
+
+    try {
+
+        const hostelData = await Hostel.findOne({name : req.query.n})
+        
+        res.render('hostel-details', {hostel: hostelData})
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 
 module.exports = {
     loadDashboard,
     loadLogin,
     verifyLogin,
-    logout
+    logout,
+    loadHostelDetails
 }
 
 
