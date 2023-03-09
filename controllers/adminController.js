@@ -26,11 +26,12 @@ const verifyLogin = async (req, res) => {
             const passwordMatch = await bcrypt.compare(password, userData.password)
             if (passwordMatch) {
 
-                if (userData.is_admin === 0) {
+                if (userData.role === 0) {
                     res.render('login', { message: "Not an admin" })
                 }
                 else {
                     req.session.user_id = userData._id
+                    req.session.role = userData.role
                     res.redirect('/admin/home')
                 }
 
@@ -72,7 +73,7 @@ const loadDashboard = async (req, res) => {
 
     try {
 
-        const usersData = await User.find({ is_admin: 0 })
+        const usersData = await User.find({ role: 0 })
         const hostelsData = await Hostel.find({})
         res.render('dashboard', { users: usersData, hostels: hostelsData })
     } catch (error) {
@@ -84,7 +85,7 @@ const loadUsersList = async (req, res) => {
 
     try {
 
-        const usersData = await User.find({ is_admin: 0 })
+        const usersData = await User.find({ role: 0 })
         
         res.render('users-list', { users: usersData })
     } catch (error) {
@@ -236,7 +237,8 @@ const addWarden = async (req, res) => {
             email: req.body.email,
             phone: req.body.phone,
             password: spassword,
-            hostel_name : req.body.hostel_name
+            hostel_name : req.body.hostel_name,
+            role: 2
 
         });
 

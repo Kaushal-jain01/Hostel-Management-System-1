@@ -4,17 +4,29 @@ const process = require('process');
 
 const password = process.env.MONGOPASSWORD
 const username = process.env.MONGOUSERNAME
-
 const PUBLISHABLE_KEY = process.env.PUBLISHABLE_KEY
 const SECRET_KEY = process.env.SECRET_KEY
 
 const PORT = 3000 || process.env.PORT
 
-console.log(username)
+//for local testing *comment it when not in use*
+// mongoose.connect("mongodb://localhost:27017/hostel-mgmt", {useNewUrlParser: true})
+// .then(()=> {
+//     console.log("Mongo local database connected")
+// })
+// .catch(err => {
+//     console.log(err)
+// })
+
+//for cloud testing *comment it when not in use*
 mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/?retryWrites=true&w=majority`,
     {
         useNewUrlParser: true,     
         useUnifiedTopology: true
+    }).then(() => {
+        console.log("Mongo Connected to Database")
+    }).catch(err => {
+        console.log(err)
     })
 
 const port = 3000 || process.env.PORT
@@ -39,3 +51,7 @@ app.use('/warden', wardenRoute)
 app.listen(3000, function () {
     console.log(`Server is running at http://127.0.0.1:${PORT}`)
 })
+
+
+
+

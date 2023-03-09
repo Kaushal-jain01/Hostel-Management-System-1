@@ -42,7 +42,7 @@ const userSchema = mongoose.Schema({
         type:String,
         required: true
     },
-    is_admin: {
+    role: {
         type: Number,
         required: true
     },

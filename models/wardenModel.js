@@ -22,6 +22,10 @@ const wardenSchema = mongoose.Schema({
     address: {
         type: String
     },
+    role: {
+        type: Number,
+        required: true
+    },
     hostel_name: {
         type: String,
         default: 'None',

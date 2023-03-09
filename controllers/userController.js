@@ -165,7 +165,7 @@ const insertUser = async (req, res) => {
             password: spassword,
             reg_no: req.body.regNo,
             gender: req.body.gender,
-            is_admin: 0
+            role: 0
         })
 
         if(await User.findOne({reg_no : req.body.reg_no}) || await User.findOne({email: req.body.email})){
@@ -284,6 +284,7 @@ const verifyLogin = async (req, res) => {
                     res.render('login', { message: "Please verify your mail." })
                 } else {
                     req.session.user_id = userData._id
+                    req.session.role = userData.role
                     res.redirect('/home')
                 }
 
@@ -478,7 +479,9 @@ const makePayment = async (req, res) => {
                 amount: 5000,
                 description: 'Applying Hostel Room',
                 currency: 'USD',
-                customer: customer.id
+                customer: customer.id,
+                payment_method: 'pm_card_visa',
+                confirm: true
             })
         }).then((charge)=>{
             console.log(charge)
