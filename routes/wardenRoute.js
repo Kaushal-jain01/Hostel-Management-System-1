@@ -25,9 +25,7 @@ warden_route.get('/logout' , auth.isLogin , wardenController.logout)
 
 warden_route.get('/dashboard', auth.isLogin, wardenController.loadDashboard)
 
-
-
-
+warden_route.get('/hostel-details', auth.isLogin, wardenController.loadHostelDetails )
 
 
 module.exports =  warden_route

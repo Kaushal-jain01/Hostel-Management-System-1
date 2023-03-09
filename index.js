@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 require('dotenv').config();
 const process = require('process');
+const path = require('path')
 
 const password = process.env.MONGOPASSWORD
 const username = process.env.MONGOUSERNAME
@@ -19,7 +20,7 @@ const PORT = 3000 || process.env.PORT
 // })
 
 //for cloud testing *comment it when not in use*
-mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/?retryWrites=true&w=majority`,
+mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/hostel-management?retryWrites=true&w=majority`,
     {
         useNewUrlParser: true,     
         useUnifiedTopology: true
@@ -34,6 +35,11 @@ const port = 3000 || process.env.PORT
 var expressLayouts = require("express-ejs-layouts");
 const express = require('express')
 const app = express()
+
+
+
+app.use(express.static(path.join(__dirname, "public")))
+
 
 //for user routes
 const userRoute = require('./routes/userRoute')
