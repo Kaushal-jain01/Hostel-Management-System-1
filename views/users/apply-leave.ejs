@@ -1,0 +1,32 @@
+<body>
+
+    <h1>
+        Apply for leave
+    </h1>
+
+    
+    <form onsubmit="return checkDate()" action="" method="post">
+        <input type="text" name="reason" required placeholder="Reason">
+        <br><br>
+        <input type="date" name="from" required placeholder="Enter leave date">
+        <br><br>
+        <input type="date" name="to" required placeholder="Enter return date">
+        <br><br>
+        <input type="submit" value="submit">
+        <br><br>
+    
+    </form>
+
+    <script>
+        function checkDate() {
+            var fromDate = new Date(document.getElementsByName("from")[0].value);
+            var toDate = new Date(document.getElementsByName("to")[0].value);
+            if (toDate <= fromDate) {
+                alert("Return date must be greater than leave date");
+                return false;
+            }
+            return true;
+        }
+        </script>
+    
+    </body>
