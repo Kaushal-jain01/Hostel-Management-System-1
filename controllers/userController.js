@@ -502,8 +502,14 @@ const makePayment = async (req, res) => {
 const loadApplyLeave = async (req, res) => {
     try {     
        
-        res.render('apply-leave')
-
+        const hostel_name = ((await User.findOne({ _id: req.session.user_id})).hostel_allocated).hostel_name
+        if(hostel_name === 'None'){
+            res.send("<h2>Sorry!!!</h2> \n You can't apply for leave since you've not been allocated a room in any Hostel yet.")
+        }
+        else{
+            res.render('apply-leave')
+        }
+        
     } catch (error) {
         console.log(error.message)
     }
@@ -520,17 +526,35 @@ const applyLeave = async (req, res) => {
             hostel_name: ((await User.findOne({ _id: req.session.user_id})).hostel_allocated).hostel_name
         })
 
-      
+            
             await leaveData.save()
             res.redirect('/')
             console.log('success')
-        
+                
         
 
     } catch (error) {
         console.log(error.message)
     }
 }
+
+const loadLeaves = async (req, res) => {
+    try {
+        const reg_no =  ((await User.findOne({ _id: req.session.user_id})).reg_no)
+        console.log(reg_no)
+        Leave.find({reg_no: reg_no}, (err, leavesList) => {
+        if (err) {
+          console.log(err);
+          res.send('An error occurred while retrieving leaves.');
+        } else {
+            console.log(leavesList)
+          res.render('leaves', { leavesList: leavesList });
+        }
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+};
 
   
 
@@ -553,5 +577,6 @@ module.exports = {
     loadPayment,
     makePayment,
     loadApplyLeave,
-    applyLeave
+    applyLeave,
+    loadLeaves
 }
