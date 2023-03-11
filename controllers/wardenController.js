@@ -101,31 +101,43 @@ const loadLeaves = async (req, res) => {
     }
 };
 
-const approveLeave = async (req,res) => {
+const approveLeave = async (req, res) => {
     try {
+        console.log("This is the req: \n",req.body.reg_no)
+        const leave = await Leave.findOneAndUpdate(
+            { reg_no: req.body.reg_no, status: 'pending' },
+            { $set: { status: 'approved' } },
+            { new: true }
+        );
+        if (leave) {
+            res.status(200).json({ message: 'Leave approved successfully' });
+        } else {
+            res.status(404).json({ message: 'Leave not found' });
+        }
 
-        res.send("success")
-        // await Leave.updateOne(
-        //     { reg_no: req.body.reg_no },
-        //     { $set: { 
-        //         status: "approved"
-        //  }})
-
-    } catch(error) {
-        console.log(error)
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to approve leave' });
     }
 }
 
-const rejectLeave = async (req,res) => {
+const rejectLeave = async (req, res) => {
     try {
-        await Leave.updateOne(
-            { reg_no: req.body.reg_no },
-            { $set: { 
-                status: "rejected"
-         }})
+        console.log(req.body.reg_no)
+        const leave = await Leave.findOneAndUpdate(
+            { reg_no: req.body.reg_no , status: 'pending'},
+            { $set: { status: 'rejected' } },
+            { new: true }
+        );
+        if (leave) {
+            res.status(200).json({ message: 'Leave rejected successfully' });
+        } else {
+            res.status(404).json({ message: 'Leave not found' });
+        }
 
-    } catch(error) {
-        console.log(error)
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to reject leave' });
     }
 }
 
