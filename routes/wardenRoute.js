@@ -25,7 +25,13 @@ warden_route.get('/logout' , auth.isLogin , wardenController.logout)
 
 warden_route.get('/dashboard', auth.isLogin, wardenController.loadDashboard)
 
-warden_route.get('/hostel-details', auth.isLogin, wardenController.loadHostelDetails )
+warden_route.get('/hostel-details', auth.isLogin, wardenController.loadHostelDetails)
+
+warden_route.get('/leaves', auth.isLogin, wardenController.loadLeaves)
+
+warden_route.post('/leaves/approve', auth.isLogin, wardenController.approveLeave)
+
+warden_route.post('/leaves/reject', auth.isLogin, wardenController.rejectLeave)
 
 
 module.exports =  warden_route

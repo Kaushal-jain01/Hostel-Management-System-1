@@ -3,6 +3,7 @@ const Hostel = require('../models/hostelModel')
 const Complaint = require('../models/complaintModel')
 const Warden = require('../models/wardenModel')
 const bcrypt = require('bcrypt')
+const Leave = require('../models/leaveModel')
 
 
 const loadDashboard = async (req, res) => {
@@ -85,13 +86,59 @@ const loadHostelDetails = async (req, res) => {
     }
 }
 
+const loadLeaves = async (req, res) => {
+    try {
+      Leave.find({}, (err, leavesList) => {
+        if (err) {
+          console.log(err);
+          res.send('An error occurred while retrieving leaves.');
+        } else {
+          res.render('leaves', { leavesList: leavesList });
+        }
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+};
+
+const approveLeave = async (req,res) => {
+    try {
+
+        res.send("success")
+        // await Leave.updateOne(
+        //     { reg_no: req.body.reg_no },
+        //     { $set: { 
+        //         status: "approved"
+        //  }})
+
+    } catch(error) {
+        console.log(error)
+    }
+}
+
+const rejectLeave = async (req,res) => {
+    try {
+        await Leave.updateOne(
+            { reg_no: req.body.reg_no },
+            { $set: { 
+                status: "rejected"
+         }})
+
+    } catch(error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     loadDashboard,
     loadLogin,
     verifyLogin,
     logout,
-    loadHostelDetails
+    loadHostelDetails,
+    loadLeaves,
+    approveLeave,
+    rejectLeave
 }
 
 

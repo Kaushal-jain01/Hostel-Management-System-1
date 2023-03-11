@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const Hostel = require('../models/hostelModel')
 const Complaint = require('../models/complaintModel');
+const Leave = require('../models/leaveModel')
 const bcrypt = require('bcrypt')
 
 const nodemailer = require('nodemailer')
@@ -497,6 +498,42 @@ const makePayment = async (req, res) => {
         console.log(error.message)
     }
 }
+
+const loadApplyLeave = async (req, res) => {
+    try {     
+       
+        res.render('apply-leave')
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const applyLeave = async (req, res) => {
+    try {  
+        
+        const leaveData = new Leave({
+            reg_no:  ((await User.findOne({ _id: req.session.user_id})).reg_no),
+            reason: req.body.reason,
+            from: req.body.from,
+            to: req.body.to,
+            hostel_name: ((await User.findOne({ _id: req.session.user_id})).hostel_allocated).hostel_name
+        })
+
+        if(await Leave.findOne({reg_no : ((await User.findOne({ _id: req.session.user_id})).reg_no)})){
+            res.send("You have already applied for a leave")
+        } else {
+            await leaveData.save()
+            res.redirect('/')
+            console.log('success')
+        }
+        
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
   
 
 module.exports = {
@@ -516,5 +553,7 @@ module.exports = {
     vacateUser,
     loadVacate,
     loadPayment,
-    makePayment
+    makePayment,
+    loadApplyLeave,
+    applyLeave
 }

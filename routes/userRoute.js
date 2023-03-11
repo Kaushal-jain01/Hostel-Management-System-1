@@ -6,7 +6,7 @@ const session = require('express-session')
 const config = require('../config/config')
 user_route.use(session({secret: config.sessionSecret}))
 
-const auth = require('../middleware/auth')
+const auth = require('../middleware/userAuth')
 
 user_route.set('view engine', 'ejs')
 user_route.set('views', './views/users')
@@ -73,6 +73,10 @@ user_route.post('/vacateUser', auth.isLogin, userController.vacateUser);
 user_route.get('/payment', auth.isLogin, userController.loadPayment)
 
 user_route.post('/payment', auth.isLogin, userController.makePayment)
+
+user_route.get('/apply-leave', auth.isLogin, userController.loadApplyLeave)
+
+user_route.post('/apply-leave', auth.isLogin, userController.applyLeave)
 
 
 module.exports = user_route
