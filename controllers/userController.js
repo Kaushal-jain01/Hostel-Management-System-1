@@ -520,13 +520,11 @@ const applyLeave = async (req, res) => {
             hostel_name: ((await User.findOne({ _id: req.session.user_id})).hostel_allocated).hostel_name
         })
 
-        if(await Leave.findOne({reg_no : ((await User.findOne({ _id: req.session.user_id})).reg_no)})){
-            res.send("You have already applied for a leave")
-        } else {
+      
             await leaveData.save()
             res.redirect('/')
             console.log('success')
-        }
+        
         
 
     } catch (error) {

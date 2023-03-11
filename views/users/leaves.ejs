@@ -1,0 +1,14 @@
+
+<body>
+    <ul>
+      <% leavesList.forEach(function(leave) { %>
+        <li>
+          <h5>Student : <%= leave.reg_no %></h5>
+          <p>Reason: <%= leave.reason %></p>
+          <p>From: <%= leave.from %></p>
+          <p>To: <%= leave.to %></p>
+          
+        </li>
+      <% }); %>
+    </ul>
+    </body>

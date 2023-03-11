@@ -33,7 +33,7 @@ mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb
 
 
 
-const port = 3000 || process.env.PORT
+const port = 3001 || process.env.PORT
 
 var expressLayouts = require("express-ejs-layouts");
 const express = require('express')

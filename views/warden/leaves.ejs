@@ -1,4 +1,5 @@
 
+
 <body>
   <ul>
     <% leavesList.forEach(function(leave) { %>
@@ -7,18 +8,26 @@
         <p>Reason: <%= leave.reason %></p>
         <p>From: <%= leave.from %></p>
         <p>To: <%= leave.to %></p>
-        <p>Status: <%= leave.status %> </p>
-        <button onclick="approveLeave('<%= leave.reg_no %>')">Approve</button>
-        <button onclick="rejectLeave('<%= leave.reg_no %>')">Reject</button>
+        <% if (leave.status === "pending") { %>
+          <p>Status: <%= leave.status %> </p>
+          <button onclick="approveLeave('<%= leave.reg_no %>')">Approve</button>
+          <button onclick="rejectLeave('<%= leave.reg_no %>')">Reject</button>
+        <% } else if (leave.status === "approved") { %>
+          <p>Status: <%= leave.status %> </p>
+          <button disabled>Approved</button>
+        <% } else { %>
+          <p>Status: <%= leave.status %> </p>
+          <button disabled>Rejected</button>
+        <% } %>
       </li>
     <% }); %>
   </ul>
-
   <script>
-    // function to handle approve button click
+   
+   // function to handle approve button click
 function approveLeave(reg_no) {
-  fetch('/leaves/approve', {
-    method: 'PUT',
+  fetch('/warden/leaves/approve', {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ reg_no })
   })
@@ -36,10 +45,9 @@ function approveLeave(reg_no) {
   });
 }
 
-// function to handle reject button click
 function rejectLeave(reg_no) {
-  fetch('/leaves/approve', {
-    method: 'PUT',
+  fetch('/warden/leaves/reject', {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ reg_no })
   })
@@ -56,5 +64,6 @@ function rejectLeave(reg_no) {
     console.log(error);
   });
 }
-  </script>
+
+</script>
 </body>
