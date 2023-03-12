@@ -3,30 +3,31 @@
     <h1>Add Warden data</h1>
 
     <form action="" method="post">
-        <input type="text" name="name" placeholder="Enter Name" required>
-        <br><br>
+        <input class="form-control" type="text" name="name" placeholder="Enter Name" required>
+        <br>
 
-        <input type="text" name="phone" placeholder="Enter Phone" required>
-        <br><br>
+        <input class="form-control" type="text" name="phone" placeholder="Enter Phone" required>
+        <br>
 
-        <input type="text" name="address" placeholder="Enter address" required>
-        <br><br>
+        <input class="form-control" type="text" name="address" placeholder="Enter address" required>
+        <br>
 
-        <input type="email" name="email" placeholder="Enter Email." required>
-        <br><br>
+        <input class="form-control" type="email" name="email" placeholder="Enter Email." required>
+        <br>
 
-        <input type="password" name="password" placeholder="Enter password" required>
-        <br><br>
+        <input class="form-control" type="password" name="password" placeholder="Enter password" required>
+        <br>
 
         <select type="text" name="hostel_name" placeholder="Select the name of hostel" required>
-            <option value="AT 8 BOYS HOSTEL">AT 8 BOYS HOSTEL</option>
-            <option value="AT 9 BOYS HOSTEL">AT 9 BOYS HOSTEL</option>
-            <option value="GUIST GIRLS HOSTEL">GUIST GIRLS HOSTEL</option>
+            <% hostelsData.forEach(function(hostel) { %>
+                <option value="<%= hostel.name %>"><%= hostel.name %></option>
+              <% }); %>
+            
         </select>  
          
-            <br><br>
+            <br>
 
-            <input type="submit" value="Add">
+            <input type="submit" class="btn btn btn-primary" value="Add">
 
     </form>
 

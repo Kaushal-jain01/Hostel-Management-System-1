@@ -78,6 +78,6 @@ user_route.get('/apply-leave', auth.isLogin, userController.loadApplyLeave)
 
 user_route.post('/apply-leave', auth.isLogin, userController.applyLeave)
 
-user_route.get('/leaves', auth.isLogin, userController.loadLeaves)
+user_route.get('/leaves', auth.isLogin, userController.loadLeave)
 
 module.exports = user_route

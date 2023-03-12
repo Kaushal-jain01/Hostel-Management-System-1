@@ -1,7 +1,7 @@
 
 
 <body>
-  <ul>
+  <ol class="list-group list-group-numbered">
     <% leavesList.forEach(function(leave) { %>
       <li>
         <h5>Student : <%= leave.reg_no %></h5>
@@ -21,7 +21,7 @@
         <% } %>
       </li>
     <% }); %>
-  </ul>
+  </ol>
   <script>
    
    // function to handle approve button click

@@ -1,20 +1,11 @@
 <body>
-    <style>
-        table,
-        th,
-        td {
-          padding: 10px;
-          border: 1px solid black;
-          border-collapse: collapse;
-        }
-      </style>
-      
+
 
 <h1>Welcome <%= user.name %> <br></h1>
 
 
 
-<table>
+<table class="table table-hover table-bordered" class="table class="table table-hover table-bordered" table class="table table-hover table-bordered"-hover">
     <tr>
         <td>
             <img src="userImages/<%= user.image %>" width="100px" height="100px" alt="<%= user.image %>">
@@ -54,7 +45,7 @@
     </tr>
 
 
-</table>
+</table class="table table-hover table-bordered">
 
 <br>
 <a href="/edit?id=<%= user._id%>">Edit</a>

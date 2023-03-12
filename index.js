@@ -11,24 +11,24 @@ const SECRET_KEY = process.env.SECRET_KEY
 const PORT = 3000 || process.env.PORT
 
 //for local testing *comment it when not in use*
-// mongoose.connect("mongodb://localhost:27017/hostel-mgmt", {useNewUrlParser: true})
-// .then(()=> {
-//     console.log("Mongo local database connected")
-// })
-// .catch(err => {
-//     console.log(err)
-// })
+mongoose.connect("mongodb://localhost:27017/hostel-mgmt", {useNewUrlParser: true})
+.then(()=> {
+    console.log("Mongo local database connected")
+})
+.catch(err => {
+    console.log(err)
+})
 
 //for cloud testing *comment it when not in use*
-mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/hostel-management?retryWrites=true&w=majority`,
-    {
-        useNewUrlParser: true,     
-        useUnifiedTopology: true
-    }).then(() => {
-        console.log("Mongo Connected to Database")
-    }).catch(err => {
-        console.log(err)
-    })
+// mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/hostel-management?retryWrites=true&w=majority`,
+//     {
+//         useNewUrlParser: true,     
+//         useUnifiedTopology: true
+//     }).then(() => {
+//         console.log("Mongo Connected to Database")
+//     }).catch(err => {
+//         console.log(err)
+//     })
 
 
 

@@ -1,5 +1,8 @@
 <body>
-<h1>Admin Login</h1>
+
+
+<div class="container">
+    <h1>Admin Login</h1>
 
 <% 
     if(typeof message !== 'undefined'){
@@ -12,17 +15,18 @@
     }
 
 %>
+    <form action="" method="POST">
 
-<form action="" method="POST">
+        <input class="form-control" type="email" name="email" id="" placeholder="Enter Email"> <br>
+        <input class="form-control" type="password" name="password" id="" placeholder="Enter password"> <br>
+        <input type="submit" class="btn btn btn-primary" class="btn btn btn-primary" value="Login"> <br>
+    
+        <br>
+        <a>Student??</a>
+        <a href="/home">Login here</a>
+    
+    </form>
+</div>
 
-    <input type="email" name="email" id="" placeholder="Enter Email"> <br><br>
-    <input type="password" name="password" id="" placeholder="Enter password"> <br><br>
-    <input type="submit" value="Login"> <br><br>
-
-    <br>
-    <a>Student??</a>
-    <a href="/home">Login here</a>
-
-</form>
 
 </body>

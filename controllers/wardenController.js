@@ -78,7 +78,7 @@ const loadHostelDetails = async (req, res) => {
     try {
 
         const hostelData = await Hostel.findOne({name : req.query.n})
-        
+        console.log(hostelData)
         res.render('hostel-details', {hostel: hostelData})
         
     } catch (error) {

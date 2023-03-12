@@ -538,7 +538,7 @@ const applyLeave = async (req, res) => {
     }
 }
 
-const loadLeaves = async (req, res) => {
+const loadLeave = async (req, res) => {
     try {
         const reg_no =  ((await User.findOne({ _id: req.session.user_id})).reg_no)
         console.log(reg_no)
@@ -578,5 +578,5 @@ module.exports = {
     makePayment,
     loadApplyLeave,
     applyLeave,
-    loadLeaves
+    loadLeave
 }

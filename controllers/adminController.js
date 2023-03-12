@@ -84,10 +84,16 @@ const loadDashboard = async (req, res) => {
 const loadUsersList = async (req, res) => {
 
     try {
-
+        const page = req.query.page
+        const limit = 20
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        results = {}
         const usersData = await User.find({ role: 0 })
-        
-        res.render('users-list', { users: usersData })
+        results.results = (usersData).slice(startIndex, endIndex);
+        results.currentPage = page
+        console.log(results)
+        res.render('users-list', { userData: results })
     } catch (error) {
         console.log(error.message)
     }
@@ -98,7 +104,6 @@ const loadHostelsList = async (req, res) => {
     try {
 
         const hostelsData = await Hostel.find({})
-        
         res.render('hostels-list', { hostels: hostelsData })
     } catch (error) {
         console.log(error.message)
@@ -119,11 +124,22 @@ const loadAddHostel = async (req, res) => {
 const loadHostelDetails = async (req, res) => {
 
     try {
-        const hostelName = req.query.id 
-        Hostel.findOne({name: hostelName})
-        .then((hostel)=> {
-                res.render('hostel-details', {hostelData: hostel})
-        })
+        const hostelName = req.query.id
+        const page = req.query.page
+        const limit = 20
+        const hostelData = await Hostel.findOne({ name: hostelName })
+
+        const results = {
+
+        };
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        results.results = (hostelData.rooms).slice(startIndex, endIndex);
+        results.currentPage = page
+        console.log(results)
+
+        res.render('hostel-details', { hostelData: hostelData, roomData: results })
+
     } catch (error) {
         console.log(error.message)
     }
@@ -131,13 +147,13 @@ const loadHostelDetails = async (req, res) => {
 
 
 
-const loadUserDetails = async(req, res) =>{
+const loadUserDetails = async (req, res) => {
 
-    try{
-        const regNo = req.query.id 
-        const users = await User.find({reg_no: regNo})
-        res.render('user-details', {userData: users})
-    }catch(error){
+    try {
+        const regNo = req.query.id
+        const users = await User.find({ reg_no: regNo }).exec()
+        res.render('user-details', { userData: users })
+    } catch (error) {
         console.log(error.message)
     }
 }
@@ -148,7 +164,7 @@ const insertHostel = async (req, res) => {
 
 
     try {
-        
+
 
         cap = req.body.capacity
 
@@ -156,7 +172,7 @@ const insertHostel = async (req, res) => {
 
         for (let i = 0; i < cap; i++) {
             rooms.push({
-                room_no: i+1
+                room_no: i + 1
             })
         }
 
@@ -190,16 +206,16 @@ const insertHostel = async (req, res) => {
 
 const loadComplaints = async (req, res) => {
     try {
-      Complaint.find({}, (err, complaintList) => {
-        if (err) {
-          console.log(err);
-          res.send('An error occurred while retrieving complaints.');
-        } else {
-          res.render('complaints', { complaintList: complaintList });
-        }
-      });
+        Complaint.find({}, (err, complaintList) => {
+            if (err) {
+                console.log(err);
+                res.send('An error occurred while retrieving complaints.');
+            } else {
+                res.render('complaints', { complaintList: complaintList });
+            }
+        });
     } catch (error) {
-      console.log(error.message);
+        console.log(error.message);
     }
 };
 
@@ -216,19 +232,21 @@ const securePassword = async (password) => {
     }
 }
 
-const loadAddWarden = async(req, res) =>{
+const loadAddWarden = async (req, res) => {
 
-    try{
-        res.render('addWarden')
-    }catch (error) {
+    try {
+
+        const hostelsData = await Hostel.find({})
+        res.render('addWarden', { hostelsData: hostelsData })
+    } catch (error) {
         console.log(error.message);
-      }
+    }
 }
 
 const addWarden = async (req, res) => {
 
     try {
-        
+
         const spassword = await securePassword(req.body.password)
 
         const warden = new Warden({
@@ -237,7 +255,7 @@ const addWarden = async (req, res) => {
             email: req.body.email,
             phone: req.body.phone,
             password: spassword,
-            hostel_name : req.body.hostel_name,
+            hostel_name: req.body.hostel_name,
             role: 2
 
         });
@@ -245,11 +263,27 @@ const addWarden = async (req, res) => {
         const wardenData = await warden.save()
 
         if (wardenData) {
-
-            res.render('addWarden', { message: "Warden has been added." })
+            res.send(`
+            <h1>Warden has been added
+            <h3>Redirecting 
+            <script>
+            window.setTimeout(function(){
+                window.location.href = "/admin/addWarden";
+        
+            }, 3000);
+    </script>`);
         }
         else {
-            res.render('/admin/home')
+            res.send(`
+            <h1>An error occured
+            <h3>Redirecting 
+            <script>
+            window.setTimeout(function(){
+                window.location.href = "/admin/addWarden";
+        
+            }, 3000);
+    </script>`);
+
         }
 
     } catch (error) {
@@ -257,7 +291,7 @@ const addWarden = async (req, res) => {
     }
 }
 
-  
+
 
 module.exports = {
     loadLogin,

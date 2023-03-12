@@ -13,12 +13,12 @@ const roomSchema = new mongoose.Schema({
 
     student_allocated: {
         type: String,
-        default: ""
+        default: "NA"
     },
 
     student_reg_no: {
         type: String,
-        default: ""
+        default: "NA"
     }
 });
 

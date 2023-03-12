@@ -1,6 +1,6 @@
 <h1>Complaints</h1>
 
-<ul>
+<ol class="list-group list-group-numbered">
   <% complaintList.forEach(function(complaint) { %>
     <li>
       <h5>Complaint title: <%= complaint.title %></h5>
@@ -9,6 +9,6 @@
       <p>Submitted by: <%= complaint.submittedBy %></p>
     </li>
   <% }); %>
-</ul>
+</ol>
 
 

@@ -3,80 +3,28 @@
 <h1>User Registration</h1>
 
 <form action="" method="post">
-    <input type="text" name="name" placeholder="Enter Name" required>
-    <br><br>
+    <input class="form-control" type="text" name="name" placeholder="Enter Name" required>
+    <br>
 
-    <input type="email" name="email" placeholder="Enter Email" required>
-    <br><br>
+    <input class="form-control" type="email" name="email" placeholder="Enter Email" required>
+    <br>
 
-    <input type="text" name="mno" id="mno-input" placeholder="Enter Phone No." required>
-    <br><br>
+    <input class="form-control" type="text" name="mno" id="mno-input" class="form-control" placeholder="Enter Phone No." required>
+    <br>
 
 
-    <input type="password" name="password" placeholder="Enter Password" required>
-    <br><br>
+    <input class="form-control" type="password" name="password" placeholder="Enter Password" required>
+    <br>
 
-    <input type="text" name="regNo" placeholder="Enter Registration No." required>
-    <br><br>
+    <input class="form-control" type="text" name="regNo" placeholder="Enter Registration No." required>
+    <br>
 
     <select type="text" name="gender" placeholder="Select your Gender" required>
       <option value="male">Male</option>
       <option value="female">Female</option>
    </select> 
 
-    <input type="submit" value="register">
+    <input type="submit" class="btn btn btn-primary" value="register">
 
 </form>
-
-
-
-<script>
-    function validatePhoneNumber(phoneNumber) {
-      const regex = /^[0-9]{10}$/;
-      return regex.test(phoneNumber);
-    }
-    
-    const mnoInput = document.querySelector('#mno-input');
-    const form = document.querySelector('form');
-    errorMessageDisplayed = false
-    
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      
-      
-      const mno = mnoInput.value.trim();
-      console.log(mno);
-      if (!validatePhoneNumber(mno)) {
-        // Phone number is invalid, show error message
-        if (errorMessageDisplayed) {
-        return
-      }
-        const errorMessage = document.createElement('h3');
-        errorMessage.textContent = 'Please enter a valid 10-digit phone number. (4 seconds left)';
-        errorMessage.style.color = 'red';
-        form.appendChild(errorMessage);
-        errorMessageDisplayed = true; // Set the error message display flag to true
-    
-        let timeLeft = 4;
-        countdown = setInterval(() => {
-        timeLeft--;
-        if (timeLeft === 0) {
-        clearInterval(countdown);
-        errorMessage.remove();
-        errorMessageDisplayed = false; // Set the error message display flag back to false
-      } else {
-        errorMessage.textContent = `Please enter a valid 10-digit phone number. (${timeLeft} seconds left)`;
-      }
-    }, 1000); // Update countdown every second
-      } else {
-        // Phone number is valid, continue with registration process
-        // ...
-        form.submit(); // Submit the form
-      }
-    });
-
-    
-    </script>
-
-
 </body>
