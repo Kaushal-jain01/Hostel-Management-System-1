@@ -3,7 +3,7 @@
 <body>
   <h1>Leaves:</h1> 
   <ol class="list-group list-group-numbered">
-    <% if (leavesList) {
+    <% if (leavesList.length !== 0) {
       leavesList.forEach(function(leave) { %>
       <li>
         <h5>Student : <%= leave.reg_no %></h5>
