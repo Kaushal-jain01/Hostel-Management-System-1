@@ -400,7 +400,11 @@ const saveComplaint = async (req, res) => {
 
 const loadVacate = async( req, res) => {
     try {
-
+        const user = await User.findByIdAndUpdate({ _id: req.session.user_id })
+        if(user.hostel_allocated.hostel_name === 'None'){
+           res.send('Sorry! You have not been allocated any room!')
+           return;
+        }
         res.render('vacate')
     } catch (error) {
         console.log(error.message)
@@ -411,6 +415,7 @@ const loadVacate = async( req, res) => {
   
 const vacateUser = async (req, res) => {
     try {
+    
       // Find the user and update in the database
       await User.findByIdAndUpdate({ _id: req.session.user_id }, { $set: { "hostel_allocated.hostel_name": "None", "hostel_allocated.room_no": 0 } });
 
@@ -556,6 +561,34 @@ const loadLeave = async (req, res) => {
     }
 };
 
+const loadHostelsList = async (req, res) => {
+    try {
+
+        const hostels = await Hostel.find({});
+        res.render('hostels-list', {hostels: hostels})
+        // console.log(stripe.create)
+
+    } catch (error) {
+        console.log(error.message)
+    }
+};
+
+
+const loadHostelDetails = async (req, res) => {
+    try {
+        Hostel.findById(req.params.id, function(err, hostel) {
+            if (err) {
+              console.log(err);
+              res.send('Error occurred while retrieving hostel details');
+            } else {
+              res.render('hostel-details.ejs', { hostel: hostel });
+            }
+          });
+    
+    } catch (error) {
+      console.log(error.message);
+    }
+};
   
 
 module.exports = {
@@ -578,5 +611,7 @@ module.exports = {
     makePayment,
     loadApplyLeave,
     applyLeave,
-    loadLeave
+    loadLeave,
+    loadHostelsList,
+    loadHostelDetails
 }

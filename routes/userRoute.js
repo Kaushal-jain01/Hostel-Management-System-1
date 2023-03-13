@@ -80,4 +80,8 @@ user_route.post('/apply-leave', auth.isLogin, userController.applyLeave)
 
 user_route.get('/leaves', auth.isLogin, userController.loadLeave)
 
+user_route.get('/hostels-list', auth.isLogin, userController.loadHostelsList)
+
+user_route.get('/hostels/:id', auth.isLogin, userController.loadHostelDetails)
+
 module.exports = user_route
