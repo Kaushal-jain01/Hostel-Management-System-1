@@ -24,6 +24,7 @@ const randomHostel = async (reg_no, gender, name, session_key) => {
         const hostelsData = await Hostel.find({})
         hostelsData.forEach(function (hostel) {
             vacan = hostel.vacancy //existing vacancy
+            console.log(vacan)
             if(hostel.vacancy){
                 if(hostel.type=="male")
                 { 
@@ -57,8 +58,9 @@ const randomHostel = async (reg_no, gender, name, session_key) => {
     
             var allocatedRoom = rooms[Math.floor(Math.random() * rooms.length)];
     
-            //updating hostel vacancies and student allocated
-    
+        //     //updating hostel vacancies and student allocated
+        //    let vacancy = Hostel.findOne({name: allocatedHostel}).vacancy
+        //    console.log(vacancy)
             await Hostel.updateOne(
                 { name: allocatedHostel, "rooms.room_no": allocatedRoom },
                 { $set: { 
@@ -79,11 +81,6 @@ const randomHostel = async (reg_no, gender, name, session_key) => {
         else {
             return false
         }
-
-
-
-        
-        
 
     } catch (error) {
         console.log(error.message)
@@ -443,7 +440,6 @@ const vacateUser = async (req, res) => {
   
         // Save the updated hostel document back to the database
         await hostel.save();
-
         
       }
   
@@ -534,9 +530,7 @@ const applyLeave = async (req, res) => {
             
             await leaveData.save()
             res.redirect('/')
-            console.log('success')
-                
-        
+            console.log('success')      
 
     } catch (error) {
         console.log(error.message)

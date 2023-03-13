@@ -88,11 +88,15 @@ const loadHostelDetails = async (req, res) => {
 
 const loadLeaves = async (req, res) => {
     try {
-      Leave.find({}, (err, leavesList) => {
+      const wardenHostel = (await Warden.findOne({_id: req.session.user_id})).hostel_name
+      console.log(wardenHostel)
+      
+      Leave.find({ hostel_name : wardenHostel }, (err, leavesList) => {
         if (err) {
           console.log(err);
           res.send('An error occurred while retrieving leaves.');
         } else {
+          leavesList.reverse();
           res.render('leaves', { leavesList: leavesList });
         }
       });

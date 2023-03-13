@@ -1,8 +1,10 @@
 
 
 <body>
+  <h1>Leaves:</h1> 
   <ol class="list-group list-group-numbered">
-    <% leavesList.forEach(function(leave) { %>
+    <% if (leavesList.length ) {
+      leavesList.forEach(function(leave) { %>
       <li>
         <h5>Student : <%= leave.reg_no %></h5>
         <p>Reason: <%= leave.reason %></p>
@@ -20,8 +22,13 @@
           <button disabled>Rejected</button>
         <% } %>
       </li>
-    <% }); %>
+    <% });
+      } else { %>
+        <p>No leaves to show!!!</p>
+    <% } %>
   </ol>
+  
+    
   <script>
    
    // function to handle approve button click
