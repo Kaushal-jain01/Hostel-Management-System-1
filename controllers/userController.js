@@ -59,15 +59,16 @@ const randomHostel = async (reg_no, gender, name, session_key) => {
             var allocatedRoom = rooms[Math.floor(Math.random() * rooms.length)];
     
         //     //updating hostel vacancies and student allocated
-        //    let vacancy = Hostel.findOne({name: allocatedHostel}).vacancy
-        //    console.log(vacancy)
+           let vacancyy = (await Hostel.findOne({name: allocatedHostel})).vacancy
+           console.log(vacancyy)
+
             await Hostel.updateOne(
                 { name: allocatedHostel, "rooms.room_no": allocatedRoom },
                 { $set: { 
                     "rooms.$.vacant":  false,
                     "rooms.$.student_reg_no": reg_no,
                     "rooms.$.student_allocated": name,
-                    vacancy: vacan - 1
+                    vacancy: vacancyy - 1
              } }
               )
     
@@ -100,43 +101,7 @@ const securePassword = async (password) => {
     }
 }
 
-//for sending mail
-const sendVerifyMail = async (name, email, user_id) => {
 
-    try {
-
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: 'jainkaushal899@gmail.com',
-                pass: ''
-            }
-        })
-
-        const mailOptions = {
-            from: 'jainkaushal899@gmail.com',
-            to: email,
-            subject: 'For Mail Verification',
-            html: '<p>Hi' + name + '. Please click <a href="http://localhost:3000/verify?id' + user_id + '">here</a> to verify your mail.</p>'
-        }
-
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error)
-            }
-            else {
-                console.log("Email has been sent:- ", info.response)
-            }
-        })
-
-    } catch (error) {
-        console.log(error.message)
-    }
-
-}
 
 const loadRegister = async (req, res) => {
     try {
@@ -234,20 +199,6 @@ const applyHostel = async (req, res) => {
 
 }
 
-
-const verifyMail = async (req, res) => {
-
-    try {
-
-        const updateInfo = await User.updateOne({ _id: req.query.id }, { $set: { is_verified: 1 } })
-
-        console.log(updateInfo)
-        res.render("email-verified")
-
-    } catch (error) {
-        console.log(error.message)
-    }
-}
 
 //login user method started
 
@@ -589,11 +540,10 @@ module.exports = {
     loadRegister,
     applyHostel,
     loadApplyHostel,
-    insertUser,
-    verifyMail,
-    loginLoad,
-    verifyLogin,
+    insertUser,   
+    loginLoad,  
     loadHome,
+    verifyLogin,
     userLogout,
     editLoad,
     updateProfile,
