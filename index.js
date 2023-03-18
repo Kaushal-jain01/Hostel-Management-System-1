@@ -10,30 +10,31 @@ const SECRET_KEY = process.env.SECRET_KEY
 
 const PORT = 3000 || process.env.PORT
 
-//for local testing *comment it when not in use*
-// mongoose.connect("mongodb://localhost:27017/hostel-mgmt", {useNewUrlParser: true})
-// .then(()=> {
-//     console.log("Mongo local database connected")
-// })
-// .catch(err => {
-//     console.log(err)
-// })
 
 //for cloud testing *comment it when not in use*
-mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/hostel-management?retryWrites=true&w=majority`,
-    {
-        useNewUrlParser: true,     
-        useUnifiedTopology: true
-    }).then(() => {
-        console.log("Mongo Connected to Database")
-    }).catch(err => {
-        console.log(err)
-    })
+const connectDB = async () => {
+    try {
+      const conn = await mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/hostel-management?retryWrites=true&w=majority`);
+      console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+      console.log(error);
+      process.exit(1);
+    }
+  }
+  
+
+//for local testing *comment it when not in use*
+// const connectDB = async () => {
+//     try {
+//       const conn = await mongoose.connect("mongodb://localhost:27017/hostel-mgmt");
+//       console.log(`MongoDB Connected: ${conn.connection.host}`);
+//     } catch (error) {
+//       console.log(error);
+//       process.exit(1);
+//     }
+//   }
 
 
-
-
-const port = 3001 || process.env.PORT
 
 var expressLayouts = require("express-ejs-layouts");
 const express = require('express')
@@ -57,9 +58,12 @@ app.use('/admin', adminRoute)
 const wardenRoute = require("./routes/wardenRoute")
 app.use('/warden', wardenRoute)
 
-app.listen(3000, function () {
-    console.log(`Server is running at http://127.0.0.1:${PORT}`)
+
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running at http://127.0.0.1:${PORT}`)    })
 })
+
 
 
 

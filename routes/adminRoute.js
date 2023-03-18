@@ -27,10 +27,6 @@ admin_route.get('/logout' , auth.isLogin , adminController.logout)
 
 admin_route.get('/dashboard', auth.isLogin , adminController.loadDashboard)
 
-admin_route.get('/dashboard/users-list', auth.isLogin , adminController.loadUsersList)
-
-admin_route.get('/dashboard/hostels-list', auth.isLogin , adminController.loadHostelsList)
-
 admin_route.get('/addHostel', auth.isLogin, adminController.loadAddHostel)
 
 admin_route.post('/addHostel', auth.isLogin, adminController.insertHostel )
@@ -44,6 +40,13 @@ admin_route.get('/viewComplaints', auth.isLogin, adminController.loadComplaints)
 admin_route.get('/addWarden', auth.isLogin, adminController.loadAddWarden)
 
 admin_route.post('/addWarden', auth.isLogin, adminController.addWarden )
+
+admin_route.post('/search-user', auth.isLogin, adminController.returnSearch)
+
+admin_route.get('/dashboard/users-list', auth.isLogin , adminController.loadUsersList)
+
+admin_route.get('/dashboard/hostels-list', auth.isLogin , adminController.loadHostelsList)
+
 
 admin_route.get('*', function(req, res){
     res.redirect('/admin')

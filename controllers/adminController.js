@@ -92,7 +92,6 @@ const loadUsersList = async (req, res) => {
         const usersData = await User.find({ role: 0 })
         results.results = (usersData).slice(startIndex, endIndex);
         results.currentPage = page
-        console.log(results)
         res.render('users-list', { userData: results })
     } catch (error) {
         console.log(error.message)
@@ -136,7 +135,6 @@ const loadHostelDetails = async (req, res) => {
         const endIndex = page * limit;
         results.results = (hostelData.rooms).slice(startIndex, endIndex);
         results.currentPage = page
-        console.log(results)
 
         res.render('hostel-details', { hostelData: hostelData, roomData: results })
 
@@ -291,6 +289,21 @@ const addWarden = async (req, res) => {
     }
 }
 
+const returnSearch = async (req, res) => {
+    try {
+        const payload = (req.body.payload.trim())
+        let searchData = await User.find(
+            { name: { $regex: new RegExp('^' + payload + '.*', 'i') } },
+            { name: 1, _id: 0 }
+        ).exec()
+        searchData = searchData.slice(0, 5)
+        console.log(searchData)
+        res.send({ payload: searchData })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 module.exports = {
@@ -307,5 +320,6 @@ module.exports = {
     loadUsersList,
     loadComplaints,
     addWarden,
-    loadAddWarden
+    loadAddWarden,
+    returnSearch
 }

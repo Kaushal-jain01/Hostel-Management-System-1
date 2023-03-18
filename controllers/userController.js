@@ -363,7 +363,6 @@ const updateProfile = async (req, res) => {
 
 const submitComplaint = async( req, res) => {
     try {
-
         res.render('complaints')
     } catch (error) {
         console.log(error.message)
