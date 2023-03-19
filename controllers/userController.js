@@ -4,7 +4,8 @@ const Complaint = require('../models/complaintModel');
 const Leave = require('../models/leaveModel')
 const bcrypt = require('bcrypt')
 
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+const { ObjectId } = require('mongodb');
 const PUBLISHABLE_KEY = 'pk_test_51MjI0OSCU5yTsDL8ehrVZDYo4tD5KSzqTzXZPmJQZelawlGfuew2feSCaQeux7ZXHxEruu3w8vpHr4ylq5GK64tV00WUb8yvNy'
 const SECRET_KEY = 'sk_test_51MjI0OSCU5yTsDL8qWYTbuqQQsQM4lXU6ru7VPNGjnCD7ILJGyec9AtB3rk31t5dzM3lcSxIowy35BkTcANdUsdQ00EOPWUxzv'
 
@@ -468,9 +469,9 @@ const loadApplyLeave = async (req, res) => {
 
 const applyLeave = async (req, res) => {
     try {  
-        
         const leaveData = new Leave({
             reg_no:  ((await User.findOne({ _id: req.session.user_id})).reg_no),
+            leave_id: new ObjectId(),
             reason: req.body.reason,
             from: req.body.from,
             to: req.body.to,

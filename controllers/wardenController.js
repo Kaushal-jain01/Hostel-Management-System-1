@@ -107,9 +107,9 @@ const loadLeaves = async (req, res) => {
 
 const approveLeave = async (req, res) => {
     try {
-        console.log("This is the req: \n",req.body.reg_no)
+        console.log("This is the leave id: \n",req.body.leave_id)
         const leave = await Leave.findOneAndUpdate(
-            { reg_no: req.body.reg_no, status: 'pending' },
+            { leave_id: req.body.leave_id, status: 'pending' },
             { $set: { status: 'approved' } },
             { new: true }
         );
@@ -127,9 +127,9 @@ const approveLeave = async (req, res) => {
 
 const rejectLeave = async (req, res) => {
     try {
-        console.log(req.body.reg_no)
+        console.log(req.body.leave_id)
         const leave = await Leave.findOneAndUpdate(
-            { reg_no: req.body.reg_no , status: 'pending'},
+            { leave_id: req.body.leave_id , status: 'pending'},
             { $set: { status: 'rejected' } },
             { new: true }
         );

@@ -12,8 +12,8 @@
         <p>To: <%= leave.to %></p>
         <% if (leave.status === "pending") { %>
           <p>Status: <%= leave.status %> </p>
-          <button onclick="approveLeave('<%= leave.reg_no %>')">Approve</button>
-          <button onclick="rejectLeave('<%= leave.reg_no %>')">Reject</button>
+          <button onclick="approveLeave('<%= leave.leave_id %>')">Approve</button>
+          <button onclick="rejectLeave('<%= leave.leave_id%>')">Reject</button>
         <% } else if (leave.status === "approved") { %>
           <p>Status: <%= leave.status %> </p>
           <button disabled>Approved</button>
@@ -32,11 +32,11 @@
   <script>
    
    // function to handle approve button click
-function approveLeave(reg_no) {
+function approveLeave(leave_id) {
   fetch('/warden/leaves/approve', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ reg_no })
+    body: JSON.stringify({ leave_id })
   })
   .then(response => {
     if (response.ok) {
@@ -52,11 +52,11 @@ function approveLeave(reg_no) {
   });
 }
 
-function rejectLeave(reg_no) {
+function rejectLeave(leave_id) {
   fetch('/warden/leaves/reject', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ reg_no })
+    body: JSON.stringify({ leave_id })
   })
   .then(response => {
     if (response.ok) {

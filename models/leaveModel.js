@@ -5,6 +5,10 @@ const leaveSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  leave_id: {
+    type: String,
+    required: true
+  },
   hostel_name: {
     type: String,
     required: true
