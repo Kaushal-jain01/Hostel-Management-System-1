@@ -4,8 +4,11 @@ const warden_route = express()
 const auth = require('../middleware/wardenAuth')
 const session = require('express-session')
 const config = require('../config/config')
-warden_route.use(session({secret: config.sessionSecret}))
-
+warden_route.use(session({
+    secret: config.sessionSecret,
+    resave: true,
+    saveUninitialized: true
+}))
 
 const bodyParser = require('body-parser')
 warden_route.use(bodyParser.json())
