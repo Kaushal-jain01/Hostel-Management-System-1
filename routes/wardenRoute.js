@@ -6,7 +6,7 @@ const session = require('express-session')
 const config = require('../config/config')
 warden_route.use(session({
     secret: config.sessionSecret,
-    resave: true,
+    resave :false,
     saveUninitialized: true
 }))
 
