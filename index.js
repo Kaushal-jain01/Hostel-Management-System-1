@@ -12,27 +12,27 @@ const PORT = 3000 || process.env.PORT
 
 
 // //for cloud testing *comment it when not in use*
-// const connectDB = async () => {
-//     try {
-//       const conn = await mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/hostel-management?retryWrites=true&w=majority`);
-//       console.log(`MongoDB Connected: ${conn.connection.host}`);
-//     } catch (error) {
-//       console.log(error);
-//       process.exit(1);
-//     }
-//   }
-  
-
-//for local testing *comment it when not in use*
 const connectDB = async () => {
     try {
-      const conn = await mongoose.connect("mongodb://localhost:27017/hostel-mgmt");
+      const conn = await mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.rprzzwl.mongodb.net/hostel-management?retryWrites=true&w=majority`);
       console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
       console.log(error);
       process.exit(1);
     }
   }
+  
+
+//for local testing *comment it when not in use*
+// const connectDB = async () => {
+//     try {
+//       const conn = await mongoose.connect("mongodb://localhost:27017/hostel-mgmt");
+//       console.log(`MongoDB Connected: ${conn.connection.host}`);
+//     } catch (error) {
+//       console.log(error);
+//       process.exit(1);
+//     }
+//   }
 
 
 
