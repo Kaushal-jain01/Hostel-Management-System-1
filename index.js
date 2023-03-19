@@ -4,8 +4,7 @@ require('dotenv').config();
 const process = require('process');
 const path = require('path')
 
-const password = process.env.MONGOPASSWORD
-const username = process.env.MONGOUSERNAME
+const MONGOURI = process.env.MONGOURI
 const PUBLISHABLE_KEY = process.env.PUBLISHABLE_KEY
 const SECRET_KEY = process.env.SECRET_KEY
 
@@ -27,7 +26,7 @@ const PORT = 3000 || process.env.PORT
 //for local testing *comment it when not in use*
 const connectDB = async () => {
     try {
-      const conn = await mongoose.connect("mongodb://localhost:27017/hostel-mgmt");
+      const conn = await mongoose.connect(MONGOURI);
       console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
       console.log(error);
