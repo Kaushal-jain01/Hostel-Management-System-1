@@ -7,7 +7,7 @@ const config = require('../config/config')
 warden_route.use(session({
     secret: config.sessionSecret,
     resave :false,
-    saveUninitialized: true
+    saveUninitialized: false
 }))
 
 const bodyParser = require('body-parser')
