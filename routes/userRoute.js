@@ -6,8 +6,8 @@ const session = require('express-session')
 const config = require('../config/config')
 user_route.use(session({
     secret: config.sessionSecret,
-    resave :false,
-    saveUninitialized: false
+    resave :true,
+    saveUninitialized: true
 }))
 const auth = require('../middleware/userAuth')
 
